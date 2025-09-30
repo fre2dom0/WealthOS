@@ -1,0 +1,41 @@
+{
+    "name": "wealthos_servant_api",
+    "version": "1.0.0",
+    "description": "Api to handle servant module interactions for WealthOS",
+    "license": "ISC",
+    "author": "fre2dom0",
+    "type": "module",
+    "scripts": {
+        "start": "NODE_ENV=production DEPLOY_TYPE=deployment node ./dist/bin/www.js",
+        "start:local": "NODE_ENV=production DEPLOY_TYPE=local node ./dist/bin/www.js",
+        "start:stage": "NODE_ENV=stage DEPLOY_TYPE=deployment node ./dist/bin/www.js",
+        "start:stage:local": "NODE_ENV=stage DEPLOY_TYPE=local node ./dist/bin/www.js",
+        "build": "tsc",
+        "dev": "NODE_ENV=development DEPLOY_TYPE=local nodemon --exec \"tsx bin/www.ts\" --watch bin --watch src --ext ts",
+        "dev:deploy": "NODE_ENV=development DEPLOY_TYPE=deployment nodemon --exec \"tsx bin/www.ts\" --watch bin --watch src --ext ts"
+    },
+    "dependencies": {
+        "@types/ora": "^3.1.0",
+        "chalk": "^5.6.2",
+        "dotenv": "^17.2.2",
+        "express": "^5.1.0",
+        "ora": "^9.0.0",
+        "tsx": "^4.20.6"
+    },
+    "devDependencies": {
+        "@eslint/js": "^9.36.0",
+        "@tsconfig/node22": "^22.0.2",
+        "@types/dotenv": "^6.1.1",
+        "@types/express": "^5.0.3",
+        "@types/node": "^24.5.2",
+        "eslint": "^9.36.0",
+        "eslint-plugin-perfectionist": "^4.15.0",
+        "nodemon": "^3.1.10",
+        "tsconfig-paths": "^4.2.0",
+        "typescript": "^5.9.2",
+        "typescript-eslint": "^8.44.1"
+    },
+    "imports": {
+        "#*": "./*"
+    }
+}
