@@ -1,12 +1,28 @@
 import app, { PORT } from "#app.js";
-import ora from 'ora'
+import ora, { type Ora } from 'ora'
 
+let animationInterval: NodeJS.Timeout | null = null;
+let isSpinnerStopped: boolean = false;
+export const spinner = ora({
+    hideCursor: true,
+})
+
+export const closeSpinner = () => {
+    if (!isSpinnerStopped) {
+        spinner.stopAndPersist();
+        spinner.text = '';
+        if (animationInterval) {
+            clearInterval(animationInterval);
+            animationInterval = null;
+        }
+    
+        isSpinnerStopped = true;
+    }
+}
 
 app.listen(PORT, () => {
     const baseMessage = `SERVANT API Listening for requests at port ${PORT}`;
-    const spinner = ora({
-        hideCursor: true,
-    }).start();
+    spinner.start();
 
     let dots = '...';
     let direction = -1;
@@ -22,7 +38,7 @@ app.listen(PORT, () => {
         spinner.text = baseMessage + dots;
     };
 
-    setInterval(animateDots, 200);
+    animationInterval = setInterval(animateDots, 200);
 });
 
 process.on('SIGINT', () => {
