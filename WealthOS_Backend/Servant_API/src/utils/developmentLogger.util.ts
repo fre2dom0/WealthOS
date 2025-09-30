@@ -1,6 +1,6 @@
+import API_CONFIG from "#src/configs/api.config.js";
 import { requireEnv } from "./requireEnv.util.js";
 
 export const devLog = (message: string) => {
-    const node_env = requireEnv('NODE_ENV');
-    if (node_env == 'development') console.log(message);
+    if (API_CONFIG.node_env == 'development') console.log(message);
 }
