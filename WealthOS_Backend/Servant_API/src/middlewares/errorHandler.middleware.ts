@@ -1,5 +1,5 @@
 import type { Request, Response, NextFunction } from "express";
-import type { ErrorCode } from "#types/error.type.js";
+import type { ApiResponseCode } from "#types/response.type.js";
 import ApiError from "#errors/ApiError.error.js";
 
 /**
@@ -9,7 +9,7 @@ import ApiError from "#errors/ApiError.error.js";
  */
 export const errorHandler = (err: unknown, req: Request, res: Response, next: NextFunction) => {
     let statusCode = 500;
-    let code: ErrorCode = "SERVER_ERROR";
+    let code: ApiResponseCode = "SERVER_ERROR";
     let message = "An unexpected error occurred";
     let stack: string | undefined;
 
