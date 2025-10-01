@@ -1,4 +1,4 @@
-import API_CONFIG from "#src/configs/api.config.js";
+import API_CONFIG from "#configs/api.config.js";
 import { requireEnv } from "./requireEnv.util.js";
 
 /**

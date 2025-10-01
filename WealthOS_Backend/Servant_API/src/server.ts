@@ -1,4 +1,4 @@
-import app, { PORT } from "#app.js";
+import app, { PORT } from "./app.js";
 import ora, { type Ora } from 'ora'
 
 let animationInterval: NodeJS.Timeout | null = null;

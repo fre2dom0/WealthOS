@@ -1,5 +1,5 @@
 import { isAddress } from "viem";
-import ApiError from "#src/errors/ApiError.error.js";
+import ApiError from "#errors/ApiError.error.js";
 
 /**
  * Checks empty values of incoming object

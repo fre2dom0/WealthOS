@@ -1,6 +1,6 @@
 import type { Request } from "express"
-import { devLog } from "#src/utils/consoleLoggers.util.js";
-import { createRandomString } from "#src/utils/createRandom.util.js";
+import { devLog } from "#utils/consoleLoggers.util.js";
+import { createRandomString } from "#utils/createRandom.util.js";
 
 /**
  * Creates a user session by storing the wallet address and initializing session data.

@@ -1,4 +1,4 @@
-// src/config/env.ts
+// config/env.ts
 
 import dotenv, { type DotenvConfigOutput } from 'dotenv';
 import path from 'path';

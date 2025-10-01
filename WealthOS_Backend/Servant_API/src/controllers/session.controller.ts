@@ -1,13 +1,13 @@
 import type { Request, Response, NextFunction } from "express"
 
-import { validateData } from "#src/utils/validators.util.js";
-import { verifyMessageSignatureWithNonce } from "#src/libs/verifyMessageSignature.lib.js";
+import { validateData } from "#utils/validators.util.js";
+import { verifyMessageSignatureWithNonce } from "#libs/verifyMessageSignature.lib.js";
 
-import ApiError from "#src/errors/ApiError.error.js";
-import { checkSessionService, createSessionService, nonceService } from "#src/services/session.service.js";
-import { devLog } from "#src/utils/consoleLoggers.util.js";
+import ApiError from "#errors/ApiError.error.js";
+import { checkSessionService, createSessionService, nonceService } from "#services/session.service.js";
+import { devLog } from "#utils/consoleLoggers.util.js";
 import type { ApiResponse } from "#types/response.type.js";
-import API_CONFIG from "#src/configs/api.config.js";
+import API_CONFIG from "#configs/api.config.js";
 
 export const createSessionController = async (req: Request, res: Response, next: NextFunction) => {
     try {   
