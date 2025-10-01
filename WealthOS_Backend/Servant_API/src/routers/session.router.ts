@@ -1,4 +1,4 @@
-import { checkSessionController, createSessionController, getSessionController, nonceController } from "#controllers/session.controller.js";
+import { checkSessionController, createSessionController, getSessionController, nonceController } from "../controllers/session.controller.js";
 import { Router } from "express";
 
 const router = Router();

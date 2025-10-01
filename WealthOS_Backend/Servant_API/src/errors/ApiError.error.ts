@@ -1,5 +1,5 @@
-import type { ApiResponseCode } from "#types/response.type.js";
-import { CODE_TO_STATUS } from "#types/error.type.js";
+import type { ApiResponseCode } from "../../types/response.type.js";
+import { CODE_TO_STATUS } from "../../types/error.type.js";
 
 /**
  * Custom error class for API-related errors.

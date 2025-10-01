@@ -1,4 +1,4 @@
-import ApiError from "#errors/ApiError.error.js";
+import ApiError from "../errors/ApiError.error.js";
 
 /**
  * Ensures a required environment variable is present and non-empty.

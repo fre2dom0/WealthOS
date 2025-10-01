@@ -3,8 +3,8 @@
 import dotenv, { type DotenvConfigOutput } from 'dotenv';
 import path from 'path';
 import fs from 'fs';
-import ApiError from '#errors/ApiError.error.js';
-import { requireEnv } from '#utils/requireEnv.util.js';
+import ApiError from '../errors/ApiError.error.js';
+import { requireEnv } from '../utils/requireEnv.util.js';
 
 try {
 	console.log(`\n⏳ Loading environment...`);

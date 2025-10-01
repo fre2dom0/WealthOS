@@ -37,12 +37,5 @@
 		"moduleDetection": "force",
 		"skipLibCheck": true,
 		"allowJs": true,
-		
-		"paths": {
-			"#*": [
-				"./src/*"
-			]
-		},
-
 	},
 }

@@ -1,7 +1,7 @@
 
-import ApiError from "#errors/ApiError.error.js";
-import type { ApiConfig, ChainEnv, DeployType, NodeEnv } from "#types/api.config.type.js";
-import { requireEnv } from "#utils/requireEnv.util.js";
+import type { ApiConfig, ChainEnv, DeployType, NodeEnv } from "../../types/api.config.type.js";
+import ApiError from "../errors/ApiError.error.js";
+import { requireEnv } from "../utils/requireEnv.util.js";
 import chalk from "chalk";
 
 const local_domain = 'localhost'

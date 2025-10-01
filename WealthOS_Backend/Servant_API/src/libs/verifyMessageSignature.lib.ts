@@ -1,7 +1,7 @@
 import type { Request } from 'express';
 import {verifyMessage, type VerifyMessageParameters} from 'viem';
-import { devLog } from '#utils/consoleLoggers.util.js';
-import ApiError from '#errors/ApiError.error.js';
+import { devLog } from '../utils/consoleLoggers.util.js';
+import ApiError from '../errors/ApiError.error.js';
 
 /**
  * Verifies whether a provided signature matches the given message and wallet address.
