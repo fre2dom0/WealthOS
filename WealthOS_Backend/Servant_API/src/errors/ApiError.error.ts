@@ -1,4 +1,4 @@
-import type { ErrorCode } from "#types/error.type.js";
+import type { ApiResponseCode } from "#types/response.type.js";
 import { CODE_TO_STATUS } from "#types/error.type.js";
 
 /**
@@ -8,7 +8,7 @@ import { CODE_TO_STATUS } from "#types/error.type.js";
  */
 class ApiError extends Error {
     statusCode: number;
-    code: ErrorCode;
+    code: ApiResponseCode;
 
     /**
      * Creates an ApiError instance.
@@ -18,7 +18,7 @@ class ApiError extends Error {
      * @param statusCode - Optional override for HTTP status code.
      *                     If not provided, inferred from `code`.
     */
-    constructor(message: string, code: ErrorCode = 'SERVER_ERROR', statusCode?: number) {
+    constructor(message: string, code: ApiResponseCode = 'SERVER_ERROR', statusCode?: number) {
         super(message);
         this.name = 'ApiError';
         this.code = code;

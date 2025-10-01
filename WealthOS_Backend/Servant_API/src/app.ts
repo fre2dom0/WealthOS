@@ -1,5 +1,5 @@
 import type { Request, Response } from 'express';
-import express, {type Express} from 'express';
+import express, { type Express } from 'express';
 import session from 'express-session';
 
 import './configs/env.config.js'
@@ -14,7 +14,7 @@ const app: Express = express();
 
 // Middlewares
 app.use(express.json());
-app.use(express.urlencoded({extended: true}));
+app.use(express.urlencoded({ extended: true }));
 app.use(session(SESSION_CONFIG))
 app.use(spinnerCloser);
 

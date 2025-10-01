@@ -1,6 +1,6 @@
 import { type SessionOptions } from 'express-session';
 import API_CONFIG from './api.config.js';
-import { devLog } from '#src/utils/developmentLogger.util.js';
+import { devLog } from '#src/utils/consoleLoggers.util.js';
 import chalk from 'chalk';
 import { redisStore } from './redis.config.js';
 
