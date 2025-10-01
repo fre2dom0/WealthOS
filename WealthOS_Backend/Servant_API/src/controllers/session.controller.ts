@@ -4,7 +4,7 @@ import { validateData } from "#src/utils/validators.util.js";
 import { verifyMessageSignatureWithNonce } from "#src/libs/verifyMessageSignature.lib.js";
 
 import ApiError from "#src/errors/ApiError.error.js";
-import { checkSessionAvailabilityService, createSessionService, nonceService } from "#src/services/session.service.js";
+import { checkSessionService, createSessionService, nonceService } from "#src/services/session.service.js";
 import { devLog } from "#src/utils/consoleLoggers.util.js";
 import type { ApiResponse } from "#types/response.type.js";
 import API_CONFIG from "#src/configs/api.config.js";
@@ -43,9 +43,9 @@ export const revokeSessionController = (req: Request, res: Response) => {
     }
 }
 
-export const checkSessionAvailabilityController = (req: Request, res: Response, next: NextFunction) => {
+export const checkSessionController= (req: Request, res: Response, next: NextFunction) => {
     try {
-        const availability = checkSessionAvailabilityService(req);
+        const availability = checkSessionService(req);
         const response: ApiResponse = {
             data: availability,
             message: availability ? 'Session found.' : 'No session found.',
@@ -73,7 +73,7 @@ export const nonceController = (req: Request, res: Response, next: NextFunction)
     }
 }
 
-export const fetchSessionController = (req: Request, res: Response) => {
+export const getSessionController = (req: Request, res: Response) => {
     if (API_CONFIG.node_env == 'development') {
         res.status(200).json(req.session);
     } else {

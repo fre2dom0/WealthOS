@@ -38,7 +38,7 @@ export const revokeSessionService = (req: Request) => {
  * @returns `true` if a session exists (i.e., wallet address is set), `false` otherwise
  * @throws Will throw if session access fails
  */
-export const checkSessionAvailabilityService = (req: Request): boolean => {
+export const checkSessionService = (req: Request): boolean => {
     try {
         let availability: boolean = false;
         

@@ -9,6 +9,8 @@ import { SESSION_CONFIG } from './configs/session.config.js';
 import { spinnerCloser } from './middlewares/spinnerCloser.middleware.js';
 import { errorHandler } from './middlewares/errorHandler.middleware.js';
 
+import sessionRouter from './routers/session.router.js';
+
 
 const app: Express = express();
 
@@ -21,6 +23,8 @@ app.use(spinnerCloser);
 app.get('/', (req: Request, res: Response) => {
     res.send(`Welcome to the WealthOS Servant Module API.`);
 })
+
+app.use('/session', sessionRouter);
 
 // Middleware
 app.use(errorHandler);
