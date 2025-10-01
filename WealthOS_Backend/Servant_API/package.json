@@ -6,10 +6,10 @@
     "author": "fre2dom0",
     "type": "module",
     "scripts": {
-        "start": "NODE_ENV=production DEPLOY_TYPE=deployment node ./dist/bin/www.js",
-        "start:local": "NODE_ENV=production DEPLOY_TYPE=local node ./dist/bin/www.js",
-        "start:stage": "NODE_ENV=stage DEPLOY_TYPE=deployment node ./dist/bin/www.js",
-        "start:stage:local": "NODE_ENV=stage DEPLOY_TYPE=local node ./dist/bin/www.js",
+        "start": "NODE_ENV=production DEPLOY_TYPE=deployment node ./src/server.js",
+        "start:local": "NODE_ENV=production DEPLOY_TYPE=local node ./src/server.js",
+        "start:stage": "NODE_ENV=stage DEPLOY_TYPE=deployment node ./src/server.js",
+        "start:stage:local": "NODE_ENV=stage DEPLOY_TYPE=local node ./src/server.js",
         "build": "tsc",
         "dev": "NODE_ENV=development DEPLOY_TYPE=local nodemon --exec \"tsx src/server.ts \" --watch src --ext ts",
         "dev:deploy": "NODE_ENV=development DEPLOY_TYPE=deployment nodemon --exec \"tsx src/server.ts\" --watch src --ext ts"
