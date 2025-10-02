@@ -2,7 +2,8 @@ import { RedisStore } from 'rate-limit-redis'
 import ApiError from '../errors/ApiError.error.js';
 import redisClient from './redis.config.js';
 import { infoLog } from '../utils/consoleLoggers.util.js';
-import rateLimit from 'express-rate-limit';
+import rateLimit, { type RateLimitRequestHandler } from 'express-rate-limit';
+
 
 
 // Create and use the rate limiter
@@ -21,6 +22,12 @@ export const RATE_LIMITER_CONFIG = {
 	}),
 };
 
-export const rateLimiter = rateLimit(RATE_LIMITER_CONFIG);
+export const useRateLimit = (limit?: number, windowMs?: number): RateLimitRequestHandler => {
+	if (limit) RATE_LIMITER_CONFIG['limit'] = limit;
+	if (windowMs) RATE_LIMITER_CONFIG['windowMs'] = windowMs;
+	
+	return rateLimit(RATE_LIMITER_CONFIG);
+}
+
 infoLog('✅ Rate limiter config is ready.')
 

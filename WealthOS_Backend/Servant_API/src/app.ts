@@ -10,7 +10,6 @@ import SESSION_CONFIG from './configs/session.config.js';
 import { errorHandler } from './middlewares/errorHandler.middleware.js';
 
 import sessionRouter from './routers/session.router.js';
-import { rateLimiter } from './configs/rate-limiter.config.js';
 
 const app: Express = express();
 
@@ -18,7 +17,6 @@ const app: Express = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(session(SESSION_CONFIG))
-if (!API_CONFIG.is_test) app.use(rateLimiter); // Rate limit
 
 app.get('/', (req: Request, res: Response) => {
     res.send(`Welcome to the WealthOS Servant Module API.`);

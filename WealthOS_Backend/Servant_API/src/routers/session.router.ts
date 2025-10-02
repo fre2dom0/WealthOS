@@ -1,5 +1,6 @@
 import { checkSessionController, createSessionController, getSessionController, nonceController } from "../controllers/session.controller.js";
 import { Router } from "express";
+import API_CONFIG from "../configs/api.config.js";
 
 const router = Router();
 
