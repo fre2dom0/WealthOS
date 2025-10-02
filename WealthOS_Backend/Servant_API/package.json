@@ -13,7 +13,7 @@
         "build": "tsc",
         "dev": "NODE_ENV=development DEPLOY_TYPE=local nodemon --exec \"tsx src/server.ts \" --watch src --ext ts",
         "dev:deploy": "NODE_ENV=development DEPLOY_TYPE=deployment nodemon --exec \"tsx src/server.ts\" --watch src --ext ts",
-        "test": "TEST=true NODE_ENV=development DEPLOY_TYPE=local vitest",
+        "test": "TEST=true NODE_ENV=development DEPLOY_TYPE=local vitest --silent",
         "test:run": "TEST=true NODE_ENV=development DEPLOY_TYPE=local vitest --run",
         "test:ui": "TEST=true NODE_ENV=development DEPLOY_TYPE=local vitest --ui",
         "coverage": "TEST=true NODE_ENV=development DEPLOY_TYPE=local vitest run --coverage"

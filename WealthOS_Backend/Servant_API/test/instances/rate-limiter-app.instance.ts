@@ -1,8 +1,8 @@
 import type { Request, Response } from 'express';
 import express, { type Express } from 'express';
 
+import { errorHandler } from '../../src/middlewares/errorHandler.middleware.js';
 import { rateLimiter } from '../../src/configs/rate-limiter.config.js';
-import { test_error_handler } from '../middlewares/error-handler.middleware.js';
 
 const test_rate_limiter_app: Express = express();
 
@@ -17,6 +17,6 @@ test_rate_limiter_app.get('/', (req: Request, res: Response) => {
 
 
 // Middleware
-test_rate_limiter_app.use(test_error_handler);
+test_rate_limiter_app.use(errorHandler);
 
 export default test_rate_limiter_app;
