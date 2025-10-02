@@ -2,10 +2,19 @@ import { type SessionOptions } from 'express-session';
 import API_CONFIG from './api.config.js';
 import { devLog, infoLog } from '../utils/consoleLoggers.util.js';
 import chalk from 'chalk';
-import { redisStore } from './redis.config.js';
+import { RedisStore } from 'connect-redis';
+import redisClient from './redis.config.js';
+
 
 infoLog('⏳ Preparing session configurations...')
-export const SESSION_CONFIG: SessionOptions = {
+
+// Initialize store.
+const redisStore = new RedisStore({
+    client: redisClient,
+    prefix: "WealthOS-Session:",
+})
+
+const SESSION_CONFIG: SessionOptions = {
     secret: process.env.SESSION_SECRET || 'supersecret',
     resave: false,
     saveUninitialized: false,
@@ -23,7 +32,8 @@ export const SESSION_CONFIG: SessionOptions = {
     devLog(`\t${chalk.bold(`${key}: ${JSON.stringify(value)}`)}`);
 });
 
-infoLog('✅ Session config is ready')
+infoLog('✅ Session config is ready.')
 
+export default SESSION_CONFIG;
 
 

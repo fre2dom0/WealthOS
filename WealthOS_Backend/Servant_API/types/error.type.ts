@@ -6,5 +6,6 @@ export const CODE_TO_STATUS: Record<ApiResponseCode, number> = {
   UNAUTHORIZED: 401,
   NO_SESSION: 401,
   SESSION_FOUND: 409,
+  TOO_MANY_REQUEST: 429,
   SERVER_ERROR: 500,
 };

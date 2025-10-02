@@ -6,7 +6,6 @@ import { verifyMessageSignature } from "../libs/verifyMessageSignature.lib.js";
 
 import ApiError from "../errors/ApiError.error.js";
 import { checkSessionService, createSessionService, nonceService } from "../services/session.service.js";
-import { devLog } from "../utils/consoleLoggers.util.js";
 import API_CONFIG from "../configs/api.config.js";
 
 export const createSessionController = async (req: Request, res: Response, next: NextFunction) => {

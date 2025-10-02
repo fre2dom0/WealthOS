@@ -1,9 +1,9 @@
 import type { ApiResponse } from '../types/response.type.js';
 
 import { describe, beforeEach, it, expect, vi } from 'vitest';
-import { signMessage } from "viem/accounts";
 import request from 'supertest';
 import app from '../src/app.js';
+import { signMessage } from "viem/accounts";
 
 import {SESSION_SIGNATURE, WALLET} from './config/test.config.js';
 import { zeroAddress } from 'viem';
