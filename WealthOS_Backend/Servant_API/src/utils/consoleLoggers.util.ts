@@ -1,4 +1,3 @@
-import API_CONFIG from "../configs/api.config.js";
 import { requireEnv } from "./requireEnv.util.js";
 
 /**
@@ -6,5 +5,25 @@ import { requireEnv } from "./requireEnv.util.js";
  * @param message Logged message
  */
 export const devLog = (message: string) => {
-    if (API_CONFIG.node_env == 'development') console.log(message);
+    const node_env = requireEnv('NODE_ENV')
+	const IS_TEST:boolean = Boolean(process.env.TEST); 
+    if (node_env == 'development' && !IS_TEST) console.log(message);
+}
+
+/**
+ * Logs a message if not test mode
+ * @param message Logged message
+ */
+export const infoLog = (message: string) => {
+	const IS_TEST:boolean = Boolean(process.env.TEST); 
+    if (!IS_TEST) console.log(message);
+}
+
+/**
+ * Logs a error message if not test mode
+ * @param message Logged message
+ */
+export const errorLog = (message: string | unknown) => {
+	const IS_TEST:boolean = Boolean(process.env.TEST); 
+    if (!IS_TEST) console.error(message);
 }

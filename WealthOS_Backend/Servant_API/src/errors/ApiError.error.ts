@@ -1,5 +1,6 @@
 import type { ApiResponseCode } from "../../types/response.type.js";
 import { CODE_TO_STATUS } from "../../types/error.type.js";
+import { errorLog } from "../utils/consoleLoggers.util.js";
 
 /**
  * Custom error class for API-related errors.
@@ -30,9 +31,9 @@ class ApiError extends Error {
      * Ends the program
      */
     public static fatalError(err: unknown): never {
-        console.error('❌ Fatal error occurred');
-        if (err instanceof ApiError) console.error(err.message, err.code, err.stack);
-        else console.error(err);
+        errorLog('❌ Fatal error occurred');
+        if (err instanceof ApiError) errorLog(`${err.message}, ${err.code}, ${err.stack}`);
+        else errorLog(err);
         process.exit(1);
     }
 }

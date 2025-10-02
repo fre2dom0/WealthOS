@@ -1,10 +1,10 @@
 import { type SessionOptions } from 'express-session';
 import API_CONFIG from './api.config.js';
-import { devLog } from '../utils/consoleLoggers.util.js';
+import { devLog, infoLog } from '../utils/consoleLoggers.util.js';
 import chalk from 'chalk';
 import { redisStore } from './redis.config.js';
 
-console.log('⏳ Preparing session configurations...')
+infoLog('⏳ Preparing session configurations...')
 export const SESSION_CONFIG: SessionOptions = {
     secret: process.env.SESSION_SECRET || 'supersecret',
     resave: false,
@@ -23,7 +23,7 @@ export const SESSION_CONFIG: SessionOptions = {
     devLog(`\t${chalk.bold(`${key}: ${JSON.stringify(value)}`)}`);
 });
 
-console.log('✅ Session config is ready')
+infoLog('✅ Session config is ready')
 
 
 

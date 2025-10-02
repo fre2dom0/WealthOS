@@ -4,7 +4,7 @@ import ApiError from "../errors/ApiError.error.js";
 /**
  * Checks empty values of incoming object
  */
-export const validateData = (data: object): string[] => {
+export const validateData = (data: object, throwError: boolean): string[] => {
     const missing: string[] = [];
     
     Object.entries(data).forEach(([key, value]) => {
@@ -15,11 +15,14 @@ export const validateData = (data: object): string[] => {
             const hasEmptyString = value.some(item => {
                 return typeof item === 'string' && item.trim() === '';
             });
+
             if (hasEmptyString) {
                 missing.push(key);
             }
         }
     });
+
+    if (missing.length > 0 && throwError) throw new ApiError(`Missing or empty required fields: ${missing.join(', ')}`, 'BAD_REQUEST')
 
     return missing;
 };

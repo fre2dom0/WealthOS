@@ -19,7 +19,7 @@ import ApiError from '../errors/ApiError.error.js';
  * @throws {Error} Throws an error if verification fails or an internal error occurs
  * 
  */
-export const verifyMessageSignatureWithNonce = async (req: Request, {address, message, signature}: VerifyMessageParameters, nonce: string): Promise<boolean> => {
+export const verifyMessageSignature = async ({address, message, signature}: VerifyMessageParameters, nonce: string): Promise<boolean> => {
     try {
         devLog(`
         📝 Verify Message Signature
@@ -31,8 +31,6 @@ export const verifyMessageSignatureWithNonce = async (req: Request, {address, me
         --------------------------
         `);
 
-        if (req.session.nonce?.value != nonce) throw new ApiError('Nonce mismatchs while verifying signature', 'UNAUTHORIZED');
-        else if(req.session.nonce.expiresAt < Date.now()) throw new ApiError('Nonce expired.', 'UNAUTHORIZED');
         const verified = await verifyMessage({address, message, signature});
         return verified;
     } catch (err: unknown) {

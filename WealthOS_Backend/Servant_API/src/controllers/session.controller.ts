@@ -2,7 +2,7 @@ import type { Request, Response, NextFunction } from "express"
 import type { ApiResponse } from "../../types/response.type.js";
 
 import { validateData } from "../utils/validators.util.js";
-import { verifyMessageSignatureWithNonce } from "../libs/verifyMessageSignature.lib.js";
+import { verifyMessageSignature } from "../libs/verifyMessageSignature.lib.js";
 
 import ApiError from "../errors/ApiError.error.js";
 import { checkSessionService, createSessionService, nonceService } from "../services/session.service.js";
@@ -12,16 +12,18 @@ import API_CONFIG from "../configs/api.config.js";
 export const createSessionController = async (req: Request, res: Response, next: NextFunction) => {
     try {   
         const { address, signature, nonce } = req.body;
-        validateData({ address, signature, nonce });
+        validateData({ address, signature, nonce }, true); 
 
+        // Nonce check
+        if (req.session.nonce && req.session.nonce.value != nonce) throw new ApiError('Nonce mismatches while verifying signature.', 'UNAUTHORIZED');
+        else if (req.session.nonce && req.session.nonce.expiresAt < Date.now()) throw new ApiError('Nonce expired.', 'UNAUTHORIZED');
+
+        // Sign and check message
         const message = `Please sign the message to create user session. Nonce : ${nonce}`
-        const isVerified = await verifyMessageSignatureWithNonce(req, {address, message, signature}, nonce);
+        const isVerified = await verifyMessageSignature({address, message, signature}, nonce); 
+        if (!isVerified) throw new ApiError('Invalid signature. Please ensure the message and signature are correct.', 'UNAUTHORIZED')   
 
-        if (!isVerified) throw new ApiError(
-            'Invalid signature. Please ensure the message and signature are correct.', 
-            'UNAUTHORIZED'
-        )
-
+        // Delete nonce and create session
         delete req.session.nonce;
         createSessionService(req, address);
 
@@ -60,6 +62,8 @@ export const checkSessionController= (req: Request, res: Response, next: NextFun
 
 export const nonceController = (req: Request, res: Response, next: NextFunction) => {
     try {
+        if (req.session.address && !API_CONFIG.is_test) throw new ApiError('You already have a session', 'UNAUTHORIZED');
+        
         const nonce = nonceService(req);
         const response: ApiResponse = {
             data: nonce,

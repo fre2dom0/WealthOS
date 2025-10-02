@@ -5,10 +5,12 @@ import path from 'path';
 import fs from 'fs';
 import ApiError from '../errors/ApiError.error.js';
 import { requireEnv } from '../utils/requireEnv.util.js';
+import { infoLog } from '../utils/consoleLoggers.util.js';
 
 try {
-	console.log(`\n⏳ Loading environment...`);
-
+	const IS_TEST:boolean = Boolean(process.env.TEST); 
+	
+	infoLog(`\n⏳ Loading environment...`);
 	// 1. Load base .env file with safe typing
 	const baseResult: DotenvConfigOutput = dotenv.config({quiet: true});
 	if (baseResult.error instanceof Error) {
@@ -22,7 +24,6 @@ try {
 	// 3. Construct custom env filename
 	const envFileSuffix = `${deployType.toLowerCase()}.${nodeEnv.toLowerCase()}`;
 	const customEnvPath = path.resolve(process.cwd(), `.env.${envFileSuffix}`);
-
 	// 4. Load custom env if exists
 	if (fs.existsSync(customEnvPath)) {
 		const overrideResult = dotenv.config({ path: customEnvPath, override: true, quiet: true });
@@ -30,9 +31,9 @@ try {
 			throw new ApiError(`Failed to load custom env file: ${overrideResult.error.message}`);
 		}
 		
-		console.log(`✅ Environment loaded - ENV File: env.${envFileSuffix}`);
+		infoLog(`✅ Environment loaded - ENV File: env.${envFileSuffix}`);
 	} else {
-		console.warn(`⚠️ Custom env file not found: ${customEnvPath}`);
+		infoLog(`⚠️ Custom env file not found: ${customEnvPath}`);
 	}
 
 } catch (err: unknown) {

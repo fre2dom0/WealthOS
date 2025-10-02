@@ -18,21 +18,6 @@ export const createSessionService = (req: Request, address: `0x${string}`) => {
 }
 
 /**
- * Revokes the current user session by destroying it.
- * Currently a placeholder; implement session destruction logic as needed.
- * 
- * @returns void
- * @throws Will throw if session destruction fails
- */
-export const revokeSessionService = (req: Request) => {
-    try {
-        // TODO: Implement session destroy logic, e.g., req.session.destroy()
-    } catch (err: unknown) {
-        
-    }
-}
-
-/**
  * Checks if an active session exists for the user.
  * 
  * @returns `true` if a session exists (i.e., wallet address is set), `false` otherwise

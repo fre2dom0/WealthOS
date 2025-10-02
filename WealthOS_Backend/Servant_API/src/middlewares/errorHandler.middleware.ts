@@ -1,6 +1,7 @@
 import type { Request, Response, NextFunction } from "express";
 import type { ApiResponseCode } from "../../types/response.type.js";
 import ApiError from "../errors/ApiError.error.js";
+import { errorLog } from "../utils/consoleLoggers.util.js";
 
 /**
  * Global error-handling middleware.
@@ -25,10 +26,10 @@ export const errorHandler = (err: unknown, req: Request, res: Response, next: Ne
         message = String(err);
     }
 
-    if (process.env.NODE_ENV === "development" && stack) {
-        console.error(stack);
+    if (stack) {
+        errorLog(stack);
     } else if (process.env.NODE_ENV === "development") {
-        console.error(message);
+        errorLog(message);
     }
 
     res.status(statusCode).json({
