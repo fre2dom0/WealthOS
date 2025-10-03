@@ -1,7 +1,7 @@
-import app, { PORT } from "./app.js";
+import server from "./app.js";
 
-app.listen(PORT, () => {
-    console.log(`SERVANT API Listening for requests at port ${PORT}`);
+server.app.listen(server.PORT, () => {
+    console.log(`SERVANT API Listening for requests at port ${server.PORT}`);
 });
 
 

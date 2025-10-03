@@ -8,7 +8,8 @@ import { requireEnv } from '../utils/requireEnv.util.js';
 import { infoLog } from '../utils/consoleLoggers.util.js';
 
 try {
-	const IS_TEST:boolean = Boolean(process.env.TEST); 
+	const IS_TEST: boolean = Boolean(process.env.TEST);
+	const FILE_PATH: string = process.cwd();
 	
 	infoLog(`\n⏳ Loading environment...`);
 	// 1. Load base .env file with safe typing
@@ -18,12 +19,13 @@ try {
 	}
 
 	// 2. Determine environment context safely
-	const deployType = requireEnv('DEPLOY_TYPE');
-	const nodeEnv = requireEnv('NODE_ENV');
+	const deployType: string = requireEnv('DEPLOY_TYPE');
+	const nodeEnv: string = requireEnv('NODE_ENV');
 
 	// 3. Construct custom env filename
-	const envFileSuffix = `${deployType.toLowerCase()}.${nodeEnv.toLowerCase()}`;
-	const customEnvPath = path.resolve(process.cwd(), `.env.${envFileSuffix}`);
+	let envFileSuffix: string = `env.${deployType.toLowerCase()}.${nodeEnv.toLowerCase()}`;
+	let customEnvPath: string = path.resolve(FILE_PATH, `.${envFileSuffix}`);
+
 	// 4. Load custom env if exists
 	if (fs.existsSync(customEnvPath)) {
 		const overrideResult = dotenv.config({ path: customEnvPath, override: true, quiet: true });
@@ -34,6 +36,21 @@ try {
 		infoLog(`✅ Environment loaded - ENV File: env.${envFileSuffix}`);
 	} else {
 		infoLog(`⚠️ Custom env file not found: ${customEnvPath}`);
+	}
+
+	// 5. Load env.chain
+	envFileSuffix = `.env.chain`
+	customEnvPath = path.resolve(FILE_PATH, envFileSuffix);
+	if(fs.existsSync(customEnvPath)) {
+		const result = dotenv.config({ path: customEnvPath, quiet: true });
+
+		if (result.error) {
+			throw new ApiError(`Failed to load custom env file: ${result.error.message}`);
+		}
+
+		infoLog(`✅ Environment loaded - ENV File: env.${envFileSuffix}`);
+	} else {
+		throw new ApiError(`Failed to load custom env file: ${envFileSuffix}`);
 	}
 
 } catch (err: unknown) {

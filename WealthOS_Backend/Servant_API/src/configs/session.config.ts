@@ -9,9 +9,12 @@ import redisClient from './redis.config.js';
 infoLog('⏳ Preparing session configurations...')
 
 // Initialize store.
+
+const prefix:string = API_CONFIG.is_test ? 'Test-WealthOS-Session' : 'WealthOS-Session'; 
+
 const redisStore = new RedisStore({
     client: redisClient,
-    prefix: "WealthOS-Session:",
+    prefix
 })
 
 const SESSION_CONFIG: SessionOptions = {
@@ -25,14 +28,14 @@ const SESSION_CONFIG: SessionOptions = {
         maxAge: 86400 * 1000,
     },
     rolling: true,
-    store: redisStore
+    store: redisStore,
 };
 
 (Object.entries(SESSION_CONFIG)).forEach(([key, value]) => {
-    devLog(`\t${chalk.bold(`${key}: ${JSON.stringify(value)}`)}`);
+    devLog(`\t${chalk.bold(`- ${key}: ${JSON.stringify(value)}`)}`);
 });
 
-infoLog('✅ Session config is ready.')
+infoLog('✅ Session configuration is ready.')
 
 export default SESSION_CONFIG;
 

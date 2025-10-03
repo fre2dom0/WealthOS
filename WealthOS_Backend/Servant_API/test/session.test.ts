@@ -2,15 +2,16 @@ import type { ApiResponse } from '../types/response.type.js';
 
 import { describe, beforeEach, it, expect, vi } from 'vitest';
 import request from 'supertest';
-import app from '../src/app.js';
+import app, { createServantApp } from '../src/app.js';
 import { signMessage } from "viem/accounts";
 
 import {SESSION_SIGNATURE, WALLET} from './config/test.config.js';
 import { zeroAddress } from 'viem';
+import { SESSION_ROUTER_CONFIG } from '../src/routers/session.router.js';
 
 describe('/session', async () => {
 	const prefix: string = '/session';
-	const agent = request.agent(app);
+	const agent = request.agent(createServantApp({enableRateLimiter: false}));
 
 	describe(`GET - ${prefix}/nonce`, () => {
 		it('Should return nonce', async () => {
@@ -130,6 +131,23 @@ describe('/session', async () => {
 			const data: ApiResponse = response.body;
 			expect(data.code).to.be.equal('UNAUTHORIZED');
 			expect(data.message).to.be.equal('Nonce expired.')
+		})
+
+		it('Should throw error ')
+	})
+
+	describe('RATE LIMIT TEST', async () => {
+
+		const agent = request.agent(createServantApp({enableRateLimiter: true}));
+		
+		it(`GET - /nonce - Should throw error if exceeds limit(${SESSION_ROUTER_CONFIG.limit})`, async () => {
+			let response;
+			// for (let i = 0; i < SESSION_ROUTER_CONFIG.limit; i++) {
+			// 	console.log(i)
+			// }
+			response = await agent.get(`${prefix}/nonce`)
+			const data: ApiResponse = response?.body;
+			expect(data.code).to.be.equal('TOO_MANY_REQUEST');
 		})
 	})
 })
