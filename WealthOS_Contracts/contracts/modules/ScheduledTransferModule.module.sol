@@ -434,5 +434,9 @@ function executeScheduledTransfer(uint256[] calldata transferIds) external {
      */
     function _authorizeUpgrade(address newImplementation) internal override onlyOwner {}
 
+    function version() external pure returns(string memory) {
+        return '1.0.0';
+    }
+
     receive() external payable {}
 }

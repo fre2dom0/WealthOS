@@ -15,14 +15,13 @@ describe('Servant Module', async () => {
 
     let MockToken = await viem.deployContract('MockToken', ['Gold', 'XAU', 100n]);
 
-    let ServantForwarder = await viem.deployContract('WealthOSERC2771Forwarder');
-    let ServantImp = await viem.deployContract('WealthOSServantModule', [ServantForwarder.address]);
+    let ServantImp = await viem.deployContract('WealthOSServantModule', [zeroAddress]);
     let proxy = await viem.deployContract('ERC1967Proxy', [
         ServantImp.address,
         '0x'
     ]); 
     let ServantProxy = await viem.getContractAt('WealthOSServantModule', proxy.address);
-    await ServantProxy.write.initialize();
+    await ServantProxy.write.initialize([zeroAddress]);
 
     const DEFAULT_ADMIN_ROLE = await ServantProxy.read.DEFAULT_ADMIN_ROLE();
     const SERVANT_ROLE = await ServantProxy.read.SERVANT_ROLE();
@@ -30,9 +29,7 @@ describe('Servant Module', async () => {
     beforeEach(async () => {
         // Deployment
         MockToken = await viem.deployContract('MockToken', ['Gold', 'XAU', 100n]);
-
-        ServantForwarder = await viem.deployContract('WealthOSERC2771Forwarder');
-        ServantImp = await viem.deployContract('WealthOSServantModule', [ServantForwarder.address]);
+        ServantImp = await viem.deployContract('WealthOSServantModule', [zeroAddress]);
         proxy = await viem.deployContract('ERC1967Proxy', [
             ServantImp.address,
             '0x'
@@ -40,7 +37,7 @@ describe('Servant Module', async () => {
 
         // Initialize
         ServantProxy = await viem.getContractAt('WealthOSServantModule', proxy.address);
-        await ServantProxy.write.initialize();
+        await ServantProxy.write.initialize([zeroAddress]);
 
         // Grant role
         await ServantProxy.write.grantRole([SERVANT_ROLE, EXECUTOR_ADDRESS]);

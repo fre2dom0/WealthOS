@@ -158,7 +158,6 @@ contract WealthOSCore is Initializable, UUPSUpgradeable, OwnableUpgradeable, Ree
 
     /// @custom:oz-upgrades-unsafe-allow constructor
     constructor() {
-        vaultId = 1;
         _disableInitializers();
     }
 

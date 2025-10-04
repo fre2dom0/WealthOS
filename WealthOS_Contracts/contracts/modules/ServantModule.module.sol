@@ -4,12 +4,13 @@ pragma solidity ^0.8.30;
 import {Initializable} from "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
 import {UUPSUpgradeable} from "@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol";
 import {AccessControlUpgradeable} from "@openzeppelin/contracts-upgradeable/access/AccessControlUpgradeable.sol";
-import {ERC2771ContextUpgradeable} from "@openzeppelin/contracts-upgradeable/metatx/ERC2771ContextUpgradeable.sol";
 import {ContextUpgradeable} from "@openzeppelin/contracts-upgradeable/utils/ContextUpgradeable.sol";
 import {ReentrancyGuardUpgradeable} from "@openzeppelin/contracts-upgradeable/utils/ReentrancyGuardUpgradeable.sol";
+import {ERC2771ContextUpgradeable} from "@openzeppelin/contracts-upgradeable/metatx/ERC2771ContextUpgradeable.sol";
 
 contract WealthOSServantModule is Initializable, AccessControlUpgradeable, UUPSUpgradeable, ERC2771ContextUpgradeable, ReentrancyGuardUpgradeable {
     // --- STORAGE ---
+    address private __trustedForwarder;
     bytes32 public constant SERVANT_ROLE = keccak256("SERVANT_ROLE");
 
     uint256 public constant MIN_APPROVAL_TIME = 1 hours;
@@ -43,13 +44,14 @@ contract WealthOSServantModule is Initializable, AccessControlUpgradeable, UUPSU
         _disableInitializers();
     }
 
-    function initialize() public initializer {
+    function initialize(address trustedForwarder_) public initializer {
         __AccessControl_init();
         __UUPSUpgradeable_init();
         __Context_init();
         __ReentrancyGuard_init();
 
         _grantRole(DEFAULT_ADMIN_ROLE, _msgSender());
+        __trustedForwarder = trustedForwarder_;
     }
 
     function approve(uint256 time, bytes4[] calldata addedfnSelectors) external {
@@ -151,6 +153,10 @@ contract WealthOSServantModule is Initializable, AccessControlUpgradeable, UUPSU
 
     }
 
+    function trustedForwarder() public view override returns (address) {
+        return __trustedForwarder;
+    }
+
     function _msgSender() internal view override(ContextUpgradeable, ERC2771ContextUpgradeable) returns (address sender) {
         sender = ERC2771ContextUpgradeable._msgSender();
     }
@@ -160,6 +166,4 @@ contract WealthOSServantModule is Initializable, AccessControlUpgradeable, UUPSU
     function _contextSuffixLength() internal view override(ContextUpgradeable, ERC2771ContextUpgradeable) returns (uint256) {
         return ERC2771ContextUpgradeable._contextSuffixLength();
     }
-
-    receive() external payable {}
 }

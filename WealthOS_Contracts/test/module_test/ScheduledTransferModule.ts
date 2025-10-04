@@ -72,7 +72,7 @@ describe('Scheduled Transfer Module', async () => {
     let ServantImp = await viem.deployContract('WealthOSServantModule', [ServantForwarder.address]);
     let ServantProxy = await viem.deployContract('ERC1967Proxy', [ServantImp.address, '0x']); 
     let ServantModule = await viem.getContractAt('WealthOSServantModule', ServantProxy.address);
-    await ServantModule.write.initialize();
+    await ServantModule.write.initialize([zeroAddress]);
 
     let SERVANT_MODULE_ADDRESS = ServantModule.address;
 
@@ -135,7 +135,7 @@ describe('Scheduled Transfer Module', async () => {
         ServantImp = await viem.deployContract('WealthOSServantModule', [ServantForwarder.address]);
         ServantProxy = await viem.deployContract('ERC1967Proxy', [ServantImp.address, '0x']); 
         ServantModule = await viem.getContractAt('WealthOSServantModule', ServantProxy.address);
-        await ServantModule.write.initialize();
+        await ServantModule.write.initialize([zeroAddress]);
 
         SERVANT_MODULE_ADDRESS = ServantModule.address;
 
