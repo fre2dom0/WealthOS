@@ -12,7 +12,7 @@ export const publicClient = createPublicClient({
 const abi = servant_artifact.abi as Abi;
 
 const contract = getContract({
-	address: '0x045842b774302e889d0691e33688a474d1acfc9b', // Servant Proxy
+	address: '0x54a68ab7369514ef84ea05adbc1c4cc92357884e', // Servant Proxy
 	abi,
 	client: publicClient,
 })

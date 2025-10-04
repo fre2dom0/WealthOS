@@ -44,13 +44,14 @@ contract WealthOSServantModule is Initializable, AccessControlUpgradeable, UUPSU
         _disableInitializers();
     }
 
-    function initialize(address trustedForwarder_) public initializer {
+    function initialize(address trustedForwarder_, address _servant) public initializer {
         __AccessControl_init();
         __UUPSUpgradeable_init();
         __Context_init();
         __ReentrancyGuard_init();
 
         _grantRole(DEFAULT_ADMIN_ROLE, _msgSender());
+        _grantRole(SERVANT_ROLE, _servant);
         __trustedForwarder = trustedForwarder_;
     }
 

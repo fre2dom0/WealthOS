@@ -3,10 +3,10 @@ const { viem } = await network.connect();
 
 const deployAll = async () => {
     const ERC1967Proxy = "ERC1967Proxy";
+    
     const walletClients = await viem.getWalletClients();
-
-    const [deployer] = walletClients;
-    const [DEPLOYER_ADDRESS] = [deployer.account.address];
+    const OWNER_ACCOUNT = '0xb60706F3B1c3cA291f49BE4a840314a92eEbb12d';
+    const SERVANT_ACCOUNT = '0xb27924877CADCEdd2DE4fAf47F71ca50C55EC070';
 
     // ERC2771Forwarder
     const Forwarder = await viem.deployContract("WealthOSERC2771Forwarder", ['WealthOS-ERC2771Forwarder']);
@@ -25,7 +25,7 @@ const deployAll = async () => {
 
     try {
         console.log(`--> Initializing ServantProxy with forwarder: ${Forwarder.address}`);
-        const txHash = await ServantProxy.write.initialize([Forwarder.address]);
+        const txHash = await ServantProxy.write.initialize([Forwarder.address, SERVANT_ACCOUNT]);
         console.log(`ServantProxy.initialize txHash: ${txHash}`);
     } catch (err) {
         console.error("❌ ServantProxy.initialize failed:", err);
@@ -46,7 +46,7 @@ const deployAll = async () => {
 
     try {
         console.log(`--> Initializing WealthOSCoreProxy, servant: ${ServantProxy.address}`);
-        const txHash = await WealthOSCoreProxy.write.initialize([DEPLOYER_ADDRESS, ServantProxy.address]);
+        const txHash = await WealthOSCoreProxy.write.initialize([OWNER_ACCOUNT, ServantProxy.address]);
         console.log(`WealthOSCoreProxy.initialize txHash: ${txHash}`);
     } catch (err) {
         console.error("❌ WealthOSCoreProxy.initialize failed:", err);

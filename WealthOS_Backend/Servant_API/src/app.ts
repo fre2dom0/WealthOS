@@ -4,7 +4,7 @@ import type { ServantAppOptions } from '../types/servant-app.config.type.js'
 import express, { type Express } from 'express';
 import session from 'express-session';
 
-import './configs/env.config.js';
+import './libs/load_env.lib.js';
 import './configs/module-wallets.config.js';
 import API_CONFIG from './configs/api.config.js';
 import SESSION_CONFIG from './configs/session.config.js';
