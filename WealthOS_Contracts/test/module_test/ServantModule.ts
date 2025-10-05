@@ -21,7 +21,7 @@ describe('Servant Module', async () => {
         '0x'
     ]); 
     let ServantProxy = await viem.getContractAt('WealthOSServantModule', proxy.address);
-    await ServantProxy.write.initialize([zeroAddress]);
+    await ServantProxy.write.initialize([zeroAddress, EXECUTOR_ADDRESS]);
 
     const DEFAULT_ADMIN_ROLE = await ServantProxy.read.DEFAULT_ADMIN_ROLE();
     const SERVANT_ROLE = await ServantProxy.read.SERVANT_ROLE();
@@ -37,10 +37,9 @@ describe('Servant Module', async () => {
 
         // Initialize
         ServantProxy = await viem.getContractAt('WealthOSServantModule', proxy.address);
-        await ServantProxy.write.initialize([zeroAddress]);
+        await ServantProxy.write.initialize([zeroAddress, EXECUTOR_ADDRESS]);
 
         // Grant role
-        await ServantProxy.write.grantRole([SERVANT_ROLE, EXECUTOR_ADDRESS]);
     }) 
     
     it('Initialize should work', async () => {

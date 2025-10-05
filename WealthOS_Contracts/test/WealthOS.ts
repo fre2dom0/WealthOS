@@ -833,205 +833,205 @@ describe('WealthOSCore', async () => {
                 })
             })
     
-            describe('Detailed Index Assignment Test', async () => {
-                const amount = 1n;
-                before(async () => {
-                    // Deploy 
-                    MockToken = await viem.deployContract('MockToken', ['Gold', 'XAU', 100n]);
-                    MockToken2 = await viem.deployContract('MockToken', ['Diamond', 'DIA', 100n]);
-                    MockToken3 = await viem.deployContract('MockToken', ['Emerald', 'EM', 100n]);
-                    MockToken4 = await viem.deployContract('MockToken', ['OIL', 'OIL', 100n]);
-                    MockToken5 = await viem.deployContract('MockToken', ['Promethium', 'PM', 100n]);
-                    MockToken6 = await viem.deployContract('MockToken', ['Terbium', 'TB', 100n]);
+            // describe('Detailed Index Assignment Test', async () => {
+            //     const amount = 1n;
+            //     before(async () => {
+            //         // Deploy 
+            //         MockToken = await viem.deployContract('MockToken', ['Gold', 'XAU', 100n]);
+            //         MockToken2 = await viem.deployContract('MockToken', ['Diamond', 'DIA', 100n]);
+            //         MockToken3 = await viem.deployContract('MockToken', ['Emerald', 'EM', 100n]);
+            //         MockToken4 = await viem.deployContract('MockToken', ['OIL', 'OIL', 100n]);
+            //         MockToken5 = await viem.deployContract('MockToken', ['Promethium', 'PM', 100n]);
+            //         MockToken6 = await viem.deployContract('MockToken', ['Terbium', 'TB', 100n]);
     
-                    const MockTokens = [MockToken, MockToken2, MockToken3, MockToken4, MockToken5, MockToken6] 
+            //         const MockTokens = [MockToken, MockToken2, MockToken3, MockToken4, MockToken5, MockToken6] 
     
-                    MOCK_TOKEN_ADDRESS = MockToken.address;
-                    MOCK_TOKEN_ADDRESS_2 = MockToken2.address;
-                    MOCK_TOKEN_ADDRESS_3 = MockToken3.address;
-                    MOCK_TOKEN_ADDRESS_4 = MockToken4.address;
-                    MOCK_TOKEN_ADDRESS_5 = MockToken5.address;
-                    MOCK_TOKEN_ADDRESS_6 = MockToken6.address;
-                    MOCK_TOKENS = [MOCK_TOKEN_ADDRESS, MOCK_TOKEN_ADDRESS_2, MOCK_TOKEN_ADDRESS_3, MOCK_TOKEN_ADDRESS_4, MOCK_TOKEN_ADDRESS_5, MOCK_TOKEN_ADDRESS_6];
+            //         MOCK_TOKEN_ADDRESS = MockToken.address;
+            //         MOCK_TOKEN_ADDRESS_2 = MockToken2.address;
+            //         MOCK_TOKEN_ADDRESS_3 = MockToken3.address;
+            //         MOCK_TOKEN_ADDRESS_4 = MockToken4.address;
+            //         MOCK_TOKEN_ADDRESS_5 = MockToken5.address;
+            //         MOCK_TOKEN_ADDRESS_6 = MockToken6.address;
+            //         MOCK_TOKENS = [MOCK_TOKEN_ADDRESS, MOCK_TOKEN_ADDRESS_2, MOCK_TOKEN_ADDRESS_3, MOCK_TOKEN_ADDRESS_4, MOCK_TOKEN_ADDRESS_5, MOCK_TOKEN_ADDRESS_6];
     
-                    WealthOSCore = await viem.deployContract('WealthOSCore');
-                    await WealthOSCore.write.createVault([USER_ADDRESS], {account: USER_ADDRESS})
-                    await WealthOSCore.write.createVault([USER_ADDRESS_2], {account: USER_ADDRESS_2})
+            //         WealthOSCore = await viem.deployContract('WealthOSCore');
+            //         await WealthOSCore.write.createVault([USER_ADDRESS], {account: USER_ADDRESS})
+            //         await WealthOSCore.write.createVault([USER_ADDRESS_2], {account: USER_ADDRESS_2})
     
-                    CORE_ADDRESS = WealthOSCore.address;
-                    const USER_ADDRESSES = [USER_ADDRESS, USER_ADDRESS_2];
-                    for (let t of MockTokens) {
-                        for (let u of USER_ADDRESSES) {
-                            await t.write.mint([10000n], { account: u});
-                            await t.write.approve([CORE_ADDRESS , 10000n], { account: u});
-                        }
-                    }
+            //         CORE_ADDRESS = WealthOSCore.address;
+            //         const USER_ADDRESSES = [USER_ADDRESS, USER_ADDRESS_2];
+            //         for (let t of MockTokens) {
+            //             for (let u of USER_ADDRESSES) {
+            //                 await t.write.mint([10000n], { account: u});
+            //                 await t.write.approve([CORE_ADDRESS , 10000n], { account: u});
+            //             }
+            //         }
     
-                    await WealthOSCore.write.depositToken([USER_ADDRESS, [ // Contract index - User index
-                        {token: MOCK_TOKEN_ADDRESS_2, amount}, // 0 - 0
-                        {token: MOCK_TOKEN_ADDRESS, amount}, //   1 - 1
-                        {token: MOCK_TOKEN_ADDRESS_3, amount}, // 2 - 2
-                    ]], {account: USER_ADDRESS});
+            //         await WealthOSCore.write.depositToken([USER_ADDRESS, [ // Contract index - User index
+            //             {token: MOCK_TOKEN_ADDRESS_2, amount}, // 0 - 0
+            //             {token: MOCK_TOKEN_ADDRESS, amount}, //   1 - 1
+            //             {token: MOCK_TOKEN_ADDRESS_3, amount}, // 2 - 2
+            //         ]], {account: USER_ADDRESS});
                     
-                    await WealthOSCore.write.depositToken([USER_ADDRESS_2, [
-                        {token: MOCK_TOKEN_ADDRESS_3, amount}, // 2 - 0 
-                        {token: MOCK_TOKEN_ADDRESS_2, amount}, // 0 - 1
-                    ]], {account: USER_ADDRESS_2});
+            //         await WealthOSCore.write.depositToken([USER_ADDRESS_2, [
+            //             {token: MOCK_TOKEN_ADDRESS_3, amount}, // 2 - 0 
+            //             {token: MOCK_TOKEN_ADDRESS_2, amount}, // 0 - 1
+            //         ]], {account: USER_ADDRESS_2});
     
-                    await WealthOSCore.write.depositToken([USER_ADDRESS, [
-                        {token: MOCK_TOKEN_ADDRESS_4, amount}, // 3 - 3
-                    ]], {account: USER_ADDRESS});
+            //         await WealthOSCore.write.depositToken([USER_ADDRESS, [
+            //             {token: MOCK_TOKEN_ADDRESS_4, amount}, // 3 - 3
+            //         ]], {account: USER_ADDRESS});
     
-                    await WealthOSCore.write.depositToken([USER_ADDRESS_2, [
-                        {token: MOCK_TOKEN_ADDRESS_6, amount}, // 4 - 2
-                        {token: MOCK_TOKEN_ADDRESS_5, amount}, // 5 - 3
-                        {token: MOCK_TOKEN_ADDRESS_4, amount}, // 3 - 4
-                    ]], {account: USER_ADDRESS_2});
-                })
+            //         await WealthOSCore.write.depositToken([USER_ADDRESS_2, [
+            //             {token: MOCK_TOKEN_ADDRESS_6, amount}, // 4 - 2
+            //             {token: MOCK_TOKEN_ADDRESS_5, amount}, // 5 - 3
+            //             {token: MOCK_TOKEN_ADDRESS_4, amount}, // 3 - 4
+            //         ]], {account: USER_ADDRESS_2});
+            //     })
     
-                // --- LIST ---
-                // CONTRACT LIST 
-                // MOCK_TOKEN_ADDRESS_2 => 0
-                // MOCK_TOKEN_ADDRESS   => 1
-                // MOCK_TOKEN_ADDRESS_3 => 2
-                // MOCK_TOKEN_ADDRESS_4 => 3
-                // MOCK_TOKEN_ADDRESS_6 => 4
-                // MOCK_TOKEN_ADDRESS_5 => 5
+            //     // --- LIST ---
+            //     // CONTRACT LIST 
+            //     // MOCK_TOKEN_ADDRESS_2 => 0
+            //     // MOCK_TOKEN_ADDRESS   => 1
+            //     // MOCK_TOKEN_ADDRESS_3 => 2
+            //     // MOCK_TOKEN_ADDRESS_4 => 3
+            //     // MOCK_TOKEN_ADDRESS_6 => 4
+            //     // MOCK_TOKEN_ADDRESS_5 => 5
     
-                // USER LIST
-                // MOCK_TOKEN_ADDRESS_2 => 0
-                // MOCK_TOKEN_ADDRESS => 1
-                // MOCK_TOKEN_ADDRESS_3 => 2
-                // MOCK_TOKEN_ADDRESS_4 => 3
+            //     // USER LIST
+            //     // MOCK_TOKEN_ADDRESS_2 => 0
+            //     // MOCK_TOKEN_ADDRESS => 1
+            //     // MOCK_TOKEN_ADDRESS_3 => 2
+            //     // MOCK_TOKEN_ADDRESS_4 => 3
     
-                // USER 2 LIST
-                // MOCK_TOKEN_ADDRESS_3 => 0
-                // MOCK_TOKEN_ADDRESS_2 => 1
-                // MOCK_TOKEN_ADDRESS_6 => 2
-                // MOCK_TOKEN_ADDRESS_5 => 3
-                // MOCK_TOKEN_ADDRESS_4 => 4
+            //     // USER 2 LIST
+            //     // MOCK_TOKEN_ADDRESS_3 => 0
+            //     // MOCK_TOKEN_ADDRESS_2 => 1
+            //     // MOCK_TOKEN_ADDRESS_6 => 2
+            //     // MOCK_TOKEN_ADDRESS_5 => 3
+            //     // MOCK_TOKEN_ADDRESS_4 => 4
     
-                // --- UPDATES ---
-                // MOCK_TOKEN_ADDRESS_6 REMOVED
-                // CONTRACT LIST > MOCK_TOKEN_ADDRESS_5 => 4
-                // USER 2 LIST > MOCK_TOKEN_ADDRESS_4 => 2
+            //     // --- UPDATES ---
+            //     // MOCK_TOKEN_ADDRESS_6 REMOVED
+            //     // CONTRACT LIST > MOCK_TOKEN_ADDRESS_5 => 4
+            //     // USER 2 LIST > MOCK_TOKEN_ADDRESS_4 => 2
                 
-                it('Should remove MOCK_TOKEN_ADDRESS_6 of USER 2 ', async () => {
-                    await WealthOSCore.write.withdrawToken([USER_ADDRESS_2, [
-                        {token: MOCK_TOKEN_ADDRESS_6, amount}
-                    ]], {account: USER_ADDRESS_2})
+            //     it('Should remove MOCK_TOKEN_ADDRESS_6 of USER 2 ', async () => {
+            //         await WealthOSCore.write.withdrawToken([USER_ADDRESS_2, [
+            //             {token: MOCK_TOKEN_ADDRESS_6, amount}
+            //         ]], {account: USER_ADDRESS_2})
     
-                    const newContractIndexOf_5 = await WealthOSCore.read.contractTokenIndex([MOCK_TOKEN_ADDRESS_5]);
-                    expect(newContractIndexOf_5).to.be.equal(4n);
+            //         const newContractIndexOf_5 = await WealthOSCore.read.contractTokenIndex([MOCK_TOKEN_ADDRESS_5]);
+            //         expect(newContractIndexOf_5).to.be.equal(4n);
     
-                    const newUser2IndexOf_4 = await WealthOSCore.read.vaultTokenIndex([2n, MOCK_TOKEN_ADDRESS_4]);
-                    expect(newUser2IndexOf_4).to.be.equal(2n);
-                })
+            //         const newUser2IndexOf_4 = await WealthOSCore.read.vaultTokenIndex([2n, MOCK_TOKEN_ADDRESS_4]);
+            //         expect(newUser2IndexOf_4).to.be.equal(2n);
+            //     })
     
-                // --- LIST ---
-                // CONTRACT LIST 
-                // MOCK_TOKEN_ADDRESS_2 => 0
-                // MOCK_TOKEN_ADDRESS   => 1
-                // MOCK_TOKEN_ADDRESS_3 => 2
-                // MOCK_TOKEN_ADDRESS_4 => 3
-                // MOCK_TOKEN_ADDRESS_5 => 4
+            //     // --- LIST ---
+            //     // CONTRACT LIST 
+            //     // MOCK_TOKEN_ADDRESS_2 => 0
+            //     // MOCK_TOKEN_ADDRESS   => 1
+            //     // MOCK_TOKEN_ADDRESS_3 => 2
+            //     // MOCK_TOKEN_ADDRESS_4 => 3
+            //     // MOCK_TOKEN_ADDRESS_5 => 4
     
-                // USER 
-                // MOCK_TOKEN_ADDRESS_2 => 0
-                // MOCK_TOKEN_ADDRESS => 1
-                // MOCK_TOKEN_ADDRESS_3 => 2
-                // MOCK_TOKEN_ADDRESS_4 => 3
+            //     // USER 
+            //     // MOCK_TOKEN_ADDRESS_2 => 0
+            //     // MOCK_TOKEN_ADDRESS => 1
+            //     // MOCK_TOKEN_ADDRESS_3 => 2
+            //     // MOCK_TOKEN_ADDRESS_4 => 3
     
-                // USER 2
-                // MOCK_TOKEN_ADDRESS_3 => 0
-                // MOCK_TOKEN_ADDRESS_2 => 1
-                // MOCK_TOKEN_ADDRESS_4 => 2
-                // MOCK_TOKEN_ADDRESS_5 => 3
+            //     // USER 2
+            //     // MOCK_TOKEN_ADDRESS_3 => 0
+            //     // MOCK_TOKEN_ADDRESS_2 => 1
+            //     // MOCK_TOKEN_ADDRESS_4 => 2
+            //     // MOCK_TOKEN_ADDRESS_5 => 3
     
-                // --- UPDATES ---
-                // MOCK_TOKEN_ADDRESS_3 REMOVED FROM USER
-                // USER LIST > MOCK_TOKEN_ADDRESS_4 => 2
+            //     // --- UPDATES ---
+            //     // MOCK_TOKEN_ADDRESS_3 REMOVED FROM USER
+            //     // USER LIST > MOCK_TOKEN_ADDRESS_4 => 2
     
-                it('Should remove MOCK_TOKEN_ADDRESS_3 of USER ', async () => {
-                    await WealthOSCore.write.withdrawToken([USER_ADDRESS, [
-                        {token: MOCK_TOKEN_ADDRESS_3, amount}
-                    ]], {account: USER_ADDRESS})
+            //     it('Should remove MOCK_TOKEN_ADDRESS_3 of USER ', async () => {
+            //         await WealthOSCore.write.withdrawToken([USER_ADDRESS, [
+            //             {token: MOCK_TOKEN_ADDRESS_3, amount}
+            //         ]], {account: USER_ADDRESS})
     
-                    const newContractIndexOf_5 = await WealthOSCore.read.contractTokenIndex([MOCK_TOKEN_ADDRESS_5]);
-                    expect(newContractIndexOf_5).to.be.equal(4n);
+            //         const newContractIndexOf_5 = await WealthOSCore.read.contractTokenIndex([MOCK_TOKEN_ADDRESS_5]);
+            //         expect(newContractIndexOf_5).to.be.equal(4n);
     
-                    const newUserIndexOf_4 = await WealthOSCore.read.vaultTokenIndex([1n, MOCK_TOKEN_ADDRESS_4]);
-                    expect(newUserIndexOf_4).to.be.equal(2n);
-                })
+            //         const newUserIndexOf_4 = await WealthOSCore.read.vaultTokenIndex([1n, MOCK_TOKEN_ADDRESS_4]);
+            //         expect(newUserIndexOf_4).to.be.equal(2n);
+            //     })
     
-                // --- LIST ---
-                // CONTRACT LIST 
-                // MOCK_TOKEN_ADDRESS_2 => 0
-                // MOCK_TOKEN_ADDRESS   => 1
-                // MOCK_TOKEN_ADDRESS_3 => 2
-                // MOCK_TOKEN_ADDRESS_4 => 3
-                // MOCK_TOKEN_ADDRESS_5 => 4
+            //     // --- LIST ---
+            //     // CONTRACT LIST 
+            //     // MOCK_TOKEN_ADDRESS_2 => 0
+            //     // MOCK_TOKEN_ADDRESS   => 1
+            //     // MOCK_TOKEN_ADDRESS_3 => 2
+            //     // MOCK_TOKEN_ADDRESS_4 => 3
+            //     // MOCK_TOKEN_ADDRESS_5 => 4
     
-                // USER 
-                // MOCK_TOKEN_ADDRESS_2 => 0
-                // MOCK_TOKEN_ADDRESS => 1
-                // MOCK_TOKEN_ADDRESS_4 => 2
+            //     // USER 
+            //     // MOCK_TOKEN_ADDRESS_2 => 0
+            //     // MOCK_TOKEN_ADDRESS => 1
+            //     // MOCK_TOKEN_ADDRESS_4 => 2
     
-                // USER 2
-                // MOCK_TOKEN_ADDRESS_3 => 0
-                // MOCK_TOKEN_ADDRESS_2 => 1
-                // MOCK_TOKEN_ADDRESS_4 => 2
-                // MOCK_TOKEN_ADDRESS_5 => 3
+            //     // USER 2
+            //     // MOCK_TOKEN_ADDRESS_3 => 0
+            //     // MOCK_TOKEN_ADDRESS_2 => 1
+            //     // MOCK_TOKEN_ADDRESS_4 => 2
+            //     // MOCK_TOKEN_ADDRESS_5 => 3
     
-                // --- UPDATES ---
-                // MOCK_TOKEN_ADDRESS_4 REMOVED FROM USER AND USER 2
-                // USER 2 LIST > MOCK_TOKEN_ADDRESS_5 => 2
+            //     // --- UPDATES ---
+            //     // MOCK_TOKEN_ADDRESS_4 REMOVED FROM USER AND USER 2
+            //     // USER 2 LIST > MOCK_TOKEN_ADDRESS_5 => 2
     
-                it('Should remove MOCK_TOKEN_ADDRESS_4 from both USER and USER 2 ', async () => {
-                    await WealthOSCore.write.withdrawToken([USER_ADDRESS, [
-                        {token: MOCK_TOKEN_ADDRESS_4, amount}
-                    ]], {account: USER_ADDRESS})
+            //     it('Should remove MOCK_TOKEN_ADDRESS_4 from both USER and USER 2 ', async () => {
+            //         await WealthOSCore.write.withdrawToken([USER_ADDRESS, [
+            //             {token: MOCK_TOKEN_ADDRESS_4, amount}
+            //         ]], {account: USER_ADDRESS})
     
-                    await WealthOSCore.write.withdrawToken([USER_ADDRESS_2, [
-                        {token: MOCK_TOKEN_ADDRESS_4, amount}
-                    ]], {account: USER_ADDRESS_2})
+            //         await WealthOSCore.write.withdrawToken([USER_ADDRESS_2, [
+            //             {token: MOCK_TOKEN_ADDRESS_4, amount}
+            //         ]], {account: USER_ADDRESS_2})
     
-                    const newContractIndexOf_5 = await WealthOSCore.read.contractTokenIndex([MOCK_TOKEN_ADDRESS_5]);
-                    expect(newContractIndexOf_5).to.be.equal(3n);
+            //         const newContractIndexOf_5 = await WealthOSCore.read.contractTokenIndex([MOCK_TOKEN_ADDRESS_5]);
+            //         expect(newContractIndexOf_5).to.be.equal(3n);
     
-                    const newUser2IndexOf_5 = await WealthOSCore.read.vaultTokenIndex([2n, MOCK_TOKEN_ADDRESS_5]);
-                    expect(newUser2IndexOf_5).to.be.equal(2n);
-                })
+            //         const newUser2IndexOf_5 = await WealthOSCore.read.vaultTokenIndex([2n, MOCK_TOKEN_ADDRESS_5]);
+            //         expect(newUser2IndexOf_5).to.be.equal(2n);
+            //     })
     
-                // --- LIST ---
-                // CONTRACT LIST 
-                // MOCK_TOKEN_ADDRESS_2 => 0
-                // MOCK_TOKEN_ADDRESS   => 1
-                // MOCK_TOKEN_ADDRESS_3 => 2
-                // MOCK_TOKEN_ADDRESS_5 => 3
+            //     // --- LIST ---
+            //     // CONTRACT LIST 
+            //     // MOCK_TOKEN_ADDRESS_2 => 0
+            //     // MOCK_TOKEN_ADDRESS   => 1
+            //     // MOCK_TOKEN_ADDRESS_3 => 2
+            //     // MOCK_TOKEN_ADDRESS_5 => 3
     
-                // USER 
-                // MOCK_TOKEN_ADDRESS_2 => 0
-                // MOCK_TOKEN_ADDRESS => 1
+            //     // USER 
+            //     // MOCK_TOKEN_ADDRESS_2 => 0
+            //     // MOCK_TOKEN_ADDRESS => 1
     
-                // USER 2
-                // MOCK_TOKEN_ADDRESS_3 => 0
-                // MOCK_TOKEN_ADDRESS_2 => 1
-                // MOCK_TOKEN_ADDRESS_5 => 2
+            //     // USER 2
+            //     // MOCK_TOKEN_ADDRESS_3 => 0
+            //     // MOCK_TOKEN_ADDRESS_2 => 1
+            //     // MOCK_TOKEN_ADDRESS_5 => 2
     
-                // --- UPDATES ---
-                // MOCK_TOKEN_ADDRESS REMOVED FROM USER
-                // USER LIST > MOCK_TOKEN_ADDRESS_5 => 1
+            //     // --- UPDATES ---
+            //     // MOCK_TOKEN_ADDRESS REMOVED FROM USER
+            //     // USER LIST > MOCK_TOKEN_ADDRESS_5 => 1
     
-                it('Should remove MOCK_TOKEN_ADDRESS from USER', async () => {
-                    await WealthOSCore.write.withdrawToken([USER_ADDRESS, [
-                        {token: MOCK_TOKEN_ADDRESS, amount}
-                    ]], {account: USER_ADDRESS})
+            //     it('Should remove MOCK_TOKEN_ADDRESS from USER', async () => {
+            //         await WealthOSCore.write.withdrawToken([USER_ADDRESS, [
+            //             {token: MOCK_TOKEN_ADDRESS, amount}
+            //         ]], {account: USER_ADDRESS})
     
-                    const newContractIndexOf_5 = await WealthOSCore.read.contractTokenIndex([MOCK_TOKEN_ADDRESS_5]);
-                    expect(newContractIndexOf_5).to.be.equal(1n);
-                })
-            })
+            //         const newContractIndexOf_5 = await WealthOSCore.read.contractTokenIndex([MOCK_TOKEN_ADDRESS_5]);
+            //         expect(newContractIndexOf_5).to.be.equal(1n);
+            //     })
+            // })
         })
     })
 

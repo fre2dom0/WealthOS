@@ -24,6 +24,12 @@ export const RATE_LIMITER_CONFIG: Partial<Options> = {
 	}),
 };
 
+/**
+ * Creates rate limit handler
+ * @param limit How much request
+ * @param windowMs How long request will be remembered
+ * @returns Request handler
+ */
 export const useRateLimit = (limit?: number, windowMs?: number): RateLimitRequestHandler => {
 	const prefix:string = API_CONFIG.is_test ? `Test-WealthOS-Rate-Limiter-${count_of_rate_limiter}` : `WealthOS-Rate-Limiter-${count_of_rate_limiter}`; 
 	devLog(`⏳ Preparing rate-limiter configuration ${prefix} :`)

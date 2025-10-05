@@ -11,7 +11,7 @@ try {
 	const IS_TEST: boolean = Boolean(process.env.TEST);
 	const FILE_PATH: string = process.cwd();
 	
-	infoLog(`\n⏳ Loading environment...`);
+	infoLog(`\n⏳ Loading environments...`);
 	// 1. Load base .env file with safe typing
 	const baseResult: DotenvConfigOutput = dotenv.config({quiet: true});
 	if (baseResult.error instanceof Error) {
@@ -23,8 +23,8 @@ try {
 	const nodeEnv: string = requireEnv('NODE_ENV');
 
 	// 3. Construct custom env filename
-	let envFileSuffix: string = `env.${deployType.toLowerCase()}.${nodeEnv.toLowerCase()}`;
-	let customEnvPath: string = path.resolve(FILE_PATH, `.${envFileSuffix}`);
+	let envFileSuffix: string = `.env.${deployType.toLowerCase()}.${nodeEnv.toLowerCase()}`;
+	let customEnvPath: string = path.resolve(FILE_PATH, `${envFileSuffix}`);
 
 	// 4. Load custom env if exists
 	if (fs.existsSync(customEnvPath)) {
@@ -48,7 +48,7 @@ try {
 			throw new ApiError(`Failed to load custom env file: ${result.error.message}`);
 		}
 
-		infoLog(`✅ Environment loaded - ENV File: env.${envFileSuffix}`);
+		infoLog(`✅ Environment loaded - ENV File: ${envFileSuffix}`);
 	} else {
 		throw new ApiError(`Failed to load custom env file: ${envFileSuffix}`);
 	}

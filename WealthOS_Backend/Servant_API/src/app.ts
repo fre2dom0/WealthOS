@@ -5,14 +5,15 @@ import express, { type Express } from 'express';
 import session from 'express-session';
 
 import './libs/load_env.lib.js';
-import './configs/module-wallets.config.js';
+
+
 import API_CONFIG from './configs/api.config.js';
+import './configs/chain.config.js';
 import SESSION_CONFIG from './configs/session.config.js';
 
 import { errorHandler } from './middlewares/errorHandler.middleware.js';
 
 import createSessionRouter from './routers/session.router.js';
-import mainRateLimit, { useRateLimit } from './configs/rate-limiter.config.js';
 
 /**
  * Creates and configures an Express application instance with middleware, routes, and error handling.
@@ -46,7 +47,6 @@ export const createServantApp = (options: ServantAppOptions = {enableRateLimiter
     app.use(express.json());
     app.use(express.urlencoded({ extended: true }));
     app.use(session(SESSION_CONFIG))
-    if (options.enableRateLimiter) app.use(mainRateLimit);
     
     app.get('/', (req: Request, res: Response) => {
         res.send(`Welcome to the WealthOS Servant Module API.`);
