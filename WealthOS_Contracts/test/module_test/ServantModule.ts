@@ -255,6 +255,7 @@ describe('Servant Module', async () => {
             functionName: 'balanceOf',
             args: [DEPLOYER_ADDRESS]
         })
+        
         const encodedFn2 = encodeFunctionData({
             abi: erc20Abi,
             functionName: 'transferFrom',

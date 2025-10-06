@@ -114,7 +114,6 @@ contract WealthOSScheduledTransferModule is Initializable, UUPSUpgradeable, Owna
        _;
     }
 
-
     // ------------------------------------------------------------------------------------------- //s
 
     /// @custom:oz-upgrades-unsafe-allow constructor
