@@ -55,19 +55,19 @@ contract WealthOSServantModule is Initializable, AccessControlUpgradeable, UUPSU
         __trustedForwarder = trustedForwarder_;
     }
 
-    function approve(uint256 time, bytes4[] calldata addedfnSelectors) external {
+    function approve(uint256 time, bytes4[] calldata fnSelectors) external {
         if (time != 0 && (time < MIN_APPROVAL_TIME || time > MAX_APPROVAL_TIME)) revert ApprovalTimeOutOfRange(time, MIN_APPROVAL_TIME, MAX_APPROVAL_TIME);
 
         address USER = _msgSender();
         uint256 TIMESTAMP = block.timestamp;
-        if (addedfnSelectors.length == 0 ) {
+        if (fnSelectors.length == 0 ) {
             if (time == 0) revert CannotApproveIfTimeIsZeroWithoutFunctionSelectors();
             allFnsApproved[USER] = true;
             emit Approved(USER, bytes4(0), time, TIMESTAMP);
         } 
         else {
-            for (uint i; i < addedfnSelectors.length; ) {
-                bytes4 fnSelector = addedfnSelectors[i];
+            for (uint i; i < fnSelectors.length; ) {
+                bytes4 fnSelector = fnSelectors[i];
 
                 if (!isFnApproved[USER][fnSelector] && fnSelector != bytes4(0)) {
                     isFnApproved[USER][fnSelector] = true;
@@ -84,11 +84,11 @@ contract WealthOSServantModule is Initializable, AccessControlUpgradeable, UUPSU
         if (time != 0) userApprovalExpiry[USER] = TIMESTAMP + time;
     }
 
-    function revokeFunctions(bytes4[] calldata removedFnSelectors) external {
+    function revokeFunctions(bytes4[] calldata fnSelectors) external {
         address USER= _msgSender();
         uint256 TIMESTAMP = block.timestamp;
-        for (uint i; i < removedFnSelectors.length; ) {
-            bytes4 fnSelector = removedFnSelectors[i];
+        for (uint i; i < fnSelectors.length; ) {
+            bytes4 fnSelector = fnSelectors[i];
             if (isFnApproved[USER][fnSelector] && fnSelector != bytes4(0)) {
                 isFnApproved[USER][fnSelector] = false;
             }
