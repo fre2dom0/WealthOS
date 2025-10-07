@@ -1,9 +1,8 @@
 
-import type { ApiConfig, ChainEnv, DeployType, NodeEnv } from "../../types/api.config.type.js";
+import type { ApiConfig, DeployType, NodeEnv } from "../../types/api.config.type.js"
 import ApiError from "../errors/ApiError.error.js";
 import { devLog, infoLog } from "../utils/consoleLoggers.util.js";
 import { requireEnv } from "../utils/requireEnv.util.js";
-import chalk from "chalk";
 
 const local_domain = 'localhost'
 
@@ -11,7 +10,7 @@ const local_domain = 'localhost'
  * Reads environment variables according to NAME key
  * @returns Read environment variables
  */
-const getEnvironmentVariables = (): { chain_env: ChainEnv, node_env: NodeEnv, deploy_type: DeployType, domain: string, port: number, allowed_origins: string[] } => {
+const getEnvironmentVariables = (): { node_env: NodeEnv, deploy_type: DeployType, domain: string, port: number, allowed_origins: string[] } => {
     const ENVIRONMENT_NAME = process.env.ENVIRONMENT;
     try {
         if (ENVIRONMENT_NAME === 'LOCAL_DEVELOPMENT') {
@@ -21,16 +20,10 @@ const getEnvironmentVariables = (): { chain_env: ChainEnv, node_env: NodeEnv, de
             if (node_env !== 'development' && node_env !== 'stage' && node_env !== 'production') {
                 throw new ApiError(`Invalid NODE_ENV: ${node_env}`);
             }
-            devLog(`\t💼 ${chalk.bold(`NODE_ENV: ${node_env}`)} `);
-
-            const chain_env = requireEnv('CHAIN_ENV');
-            devLog(`\t⛓️ ${chalk.bold(`CHAIN_ENV: ${chain_env}`)} `);
-            if (chain_env !== 'mainnet' && chain_env !== 'testnet') {
-                throw new ApiError(`Invalid CHAIN_ENV: ${chain_env}`);
-            }
+            devLog(`\t💼 NODE_ENV: ${node_env}`);
 
             const deploy_type = requireEnv('DEPLOY_TYPE');
-            devLog(`\t🖥️ ${chalk.bold(`DEPLOY_TYPE: ${deploy_type}`)} `);
+            devLog(`\t🖥️ DEPLOY_TYPE: ${deploy_type}`);
             if (deploy_type !== 'local' && deploy_type !== 'deployment') {
                 throw new ApiError(`Invalid DEPLOY_TYPE: ${deploy_type}`);
             }
@@ -41,10 +34,10 @@ const getEnvironmentVariables = (): { chain_env: ChainEnv, node_env: NodeEnv, de
             } else {
                 domain = requireEnv('DOMAIN');
             }
-            devLog(`\t🌎 ${chalk.bold(`DOMAIN: ${domain}`)} `);
+            devLog(`\t🌎 DOMAIN: ${domain}`);
 
             const port = parseInt(requireEnv('PORT'));
-            devLog(`\t⚓ ${chalk.bold(`PORT: ${port}`)} `);
+            devLog(`\t⚓ PORT: ${port}`);
             if (isNaN(port)) {
                 throw new ApiError(`Invalid PORT: ${port}`);
             }
@@ -54,12 +47,11 @@ const getEnvironmentVariables = (): { chain_env: ChainEnv, node_env: NodeEnv, de
             allowed_origins_variable.split(',').forEach(origin => {
                 allowed_origins.push(origin.trim());
             });
-            devLog(`\t🔐 ${chalk.bold(`ALLOWED_ORIGINS: ${allowed_origins}`)} `);
+            devLog(`\t🔐 ALLOWED_ORIGINS: ${allowed_origins}`);
 
             infoLog(`✅ API config is ready`);
 
             return {
-                chain_env,
                 node_env,
                 deploy_type,
                 domain,
@@ -69,11 +61,10 @@ const getEnvironmentVariables = (): { chain_env: ChainEnv, node_env: NodeEnv, de
         } else {
             devLog(`⚠️ Unknown ENVIRONMENT_NAME: ${ENVIRONMENT_NAME} - Preparing default settings...`);
             return {
-                chain_env: 'testnet',
                 node_env: 'development',
                 deploy_type: 'local',
                 domain: 'localhost',
-                port: 5000,
+                port: 5001,
                 allowed_origins: ['localhost']
             };
         }
@@ -81,11 +72,10 @@ const getEnvironmentVariables = (): { chain_env: ChainEnv, node_env: NodeEnv, de
         ApiError.fatalError(err);
     }
 }
-const { chain_env, node_env, deploy_type, domain, port, allowed_origins } = getEnvironmentVariables();
+const { node_env, deploy_type, domain, port, allowed_origins } = getEnvironmentVariables();
 const is_test: boolean = Boolean(process.env.TEST);
 const API_CONFIG: ApiConfig = {
     is_test,
-    chain_env,
     node_env,
     deploy_type,
     domain,

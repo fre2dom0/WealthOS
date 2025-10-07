@@ -8,7 +8,6 @@ import { requireEnv } from '../utils/requireEnv.util.js';
 import { infoLog } from '../utils/consoleLoggers.util.js';
 
 try {
-	const IS_TEST: boolean = Boolean(process.env.TEST);
 	const FILE_PATH: string = process.cwd();
 	
 	infoLog(`\n⏳ Loading environments...`);

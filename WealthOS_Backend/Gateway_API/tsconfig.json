@@ -12,7 +12,9 @@
 		"lib": [
 			"esnext"
 		],
-		"types": [],
+		"types": [
+			"node"
+		],
 		// and npm install -D @types/node
 		// Other Outputs
 		"sourceMap": true,
@@ -36,7 +38,6 @@
 		"noUncheckedSideEffectImports": true,
 		"moduleDetection": "force",
 		"skipLibCheck": true,
-		"allowJs": true,
 	},
 	"include": [
 		"src/**/*",

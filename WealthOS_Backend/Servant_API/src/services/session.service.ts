@@ -1,6 +1,9 @@
 import type { Request } from "express"
 import { devLog } from "../utils/consoleLoggers.util.js";
 import { createRandomString } from "../utils/createRandom.util.js";
+import ApiError from "../errors/ApiError.error.js";
+import { verifyMessageSignature } from "../libs/verifyMessageSignature.lib.js";
+import type { SessionData } from "express-session";
 
 /**
  * Creates a user session by storing the wallet address and initializing session data.
@@ -8,10 +11,22 @@ import { createRandomString } from "../utils/createRandom.util.js";
  * @param address - The user's Ethereum address in 0x format to be stored in the session
  * @throws Will throw if session operation fails
  */
-export const createSessionService = (req: Request, address: `0x${string}`) => {
+export const createSessionService = async (session: Partial<SessionData>, address: `0x${string}`, signature: `0x${string}`, nonce: string) => {
     try {   
-        req.session.address = address;
-        devLog(`✅ Session successfully created : ${req.session.address}`) 
+        // Nonce check
+        if (session.nonce && session.nonce.value != nonce) throw new ApiError('Nonce mismatches while verifying signature.', 'UNAUTHORIZED');
+        else if (session.nonce && session.nonce.expiresAt < Date.now()) throw new ApiError('Nonce expired.', 'UNAUTHORIZED');
+
+        // Sign and check message
+        const message = `Please sign the message to create user session. Nonce : ${nonce}`
+        const isVerified = await verifyMessageSignature({address, message, signature}, nonce); 
+        if (!isVerified) throw new ApiError('Invalid signature. Please ensure the message and signature are correct.', 'UNAUTHORIZED')   
+
+        // Delete nonce and create session
+        delete session.nonce;
+        session.address = address;
+        
+        devLog(`✅ Session successfully created : ${session.address}`) 
     } catch (err: unknown) {
         throw err;
     }
@@ -23,18 +38,18 @@ export const createSessionService = (req: Request, address: `0x${string}`) => {
  * @returns `true` if a session exists (i.e., wallet address is set), `false` otherwise
  * @throws Will throw if session access fails
  */
-export const checkSessionService = (req: Request): boolean => {
+export const checkSessionService = (sessionID: string, session: Partial<SessionData>): boolean => {
     try {
         let availability: boolean = false;
         
-        if (req.session.address) {
+        if (session.address) {
             availability = true;
         }
 
         if (availability) {
-            devLog(`✅ ${req.sessionID} - ${req.session.address} has a session.`)
+            devLog(`✅ ${sessionID} - ${session.address} has a session.`)
         } else {
-            devLog(`⛔ ${req.sessionID} has no session.`)
+            devLog(`⛔ ${sessionID} has no session.`)
         } 
 
         return availability
@@ -50,12 +65,12 @@ export const checkSessionService = (req: Request): boolean => {
  * @returns The generated nonce string
  * @throws Will throw if nonce generation or session storage fails
  */
-export const nonceService = (req: Request): string => {
+export const nonceService = (session: Partial<SessionData>): string => {
     try {
         const nonce = createRandomString(30);
         
         const expireTime = Date.now() + 5 * 60 * 1000; // Expires after 5 minutes
-        req.session.nonce = {
+        session.nonce = {
             value: nonce,
             expiresAt: expireTime
         };

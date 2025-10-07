@@ -219,7 +219,7 @@ describe('Servant Module', async () => {
     })
 
     describe('Revoke', () => {
-        const fnSelector = toFunctionSelector('function balanceOf(address account)')
+        const fnSelector = toFunctionSelector('qqqqqqqqq')
 
         beforeEach(async () => {
             await ServantProxy.write.approve([3600n, [fnSelector]]);

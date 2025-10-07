@@ -7,8 +7,8 @@ import fs from 'fs'
  *  - directly provided function signatures.
  *
  * Usage:
- *   ts-node script.ts ./path/to/Contract.json           // Logs selectors for all nonpayable/payable functions
- *   ts-node script.ts "transfer(address,uint256),approve(address,uint256)" // Logs selectors for specific functions
+ *   npx tsx script.ts ./path/to/Contract.json           // Logs selectors for all nonpayable/payable functions
+ *   npx tsx script.ts "transfer(address,uint256),approve(address,uint256)" // Logs selectors for specific functions
  */
 const main = async () => {
     try {
@@ -16,13 +16,15 @@ const main = async () => {
 
         if (!arg) {
             console.error('❌ Missing argument. Provide either a JSON ABI path or a function signature.')
-            console.error('Example: ts-node script.ts ./Contract.json OR ts-node script.ts "transfer(address,uint256)"')
+            console.error('Example: npx tsx script.ts ./Contract.json OR ts-node script.ts "transfer(address,uint256)"')
             process.exit(1)
         }
 
         const isJsonPath = arg.endsWith('.json')
 
         if (isJsonPath) {
+            console.log(`\n`);
+            
             // Handle ABI file mode
             if (!fs.existsSync(arg)) {
                 console.error(`❌ File not found: ${arg}`)
@@ -55,7 +57,7 @@ const main = async () => {
                 })
 
                 const fn = `${i.name}(${params})`;
-                console.log(fn, i.stateMutability, i.name, selector, artifact.contractName)
+                console.log(fn, selector, artifact.contractName)
             })
         } else {
             // Handle direct function signature mode

@@ -3,11 +3,11 @@ import { RATE_LIMITER_CONFIG } from '../src/configs/rate-limiter.config';
 
 import { describe, beforeAll, it, expect } from 'vitest';
 import request from 'supertest';
-import { createServantApp } from '../src/app';
+import createApp from '../src/libs/createApp.lib';
 
 describe('Middleware - Rate Limiter', async () => {
     const endpoint = '/';
-    const agent = request.agent(createServantApp({enableRateLimiter: true}));
+    const agent = request.agent(createApp({enableRateLimiter: true}));
     const LIMIT: number = RATE_LIMITER_CONFIG.limit as number;
 
     it(`Should throw error if exceeds the limit(${LIMIT})`, async () => {
