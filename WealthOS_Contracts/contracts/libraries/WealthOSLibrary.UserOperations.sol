@@ -33,7 +33,7 @@ library WealthOSLibrary_UserOperations {
             _updateContractTokenList(state, token);
             
             IERC20(token).safeTransferFrom(user, address(this), amount);
-            emit WealthOSTypes.TokenDeposited(user, vaultId, token, amount, block.timestamp);
+            emit WealthOSTypes.TokenDeposited(user, vaultId, token, amount);
 
             unchecked { ++i; }
         }
@@ -49,7 +49,7 @@ library WealthOSLibrary_UserOperations {
         uint256 _vaultOfUser = state.vaultOfUser[user];
 
         _updateVaultNativeBalance(state, _vaultOfUser, amount, WealthOSTypes.Operations.ADDITION);
-        emit WealthOSTypes.NativeTokenDeposited(user, _vaultOfUser, amount, block.timestamp);
+        emit WealthOSTypes.NativeTokenDeposited(user, _vaultOfUser, amount);
     }
 
     /**
@@ -77,7 +77,7 @@ library WealthOSLibrary_UserOperations {
             _updateContractTokenList(state, token);
 
             IERC20(token).safeTransfer(user, amount);
-            emit WealthOSTypes.TokenWithdrawn(user, _vaultOfUser, token, amount, block.timestamp);
+            emit WealthOSTypes.TokenWithdrawn(user, _vaultOfUser, token, amount);
 
             unchecked { ++i; }
         }
@@ -100,7 +100,7 @@ library WealthOSLibrary_UserOperations {
         (bool success, ) = payable(user).call{value: amount}("");
         if (!success) revert WealthOSTypes.NativeTransferFailed();
 
-        emit WealthOSTypes.NativeTokenWithdrawn(user, _vaultOfUser, amount, block.timestamp);
+        emit WealthOSTypes.NativeTokenWithdrawn(user, _vaultOfUser, amount);
     }
 
 

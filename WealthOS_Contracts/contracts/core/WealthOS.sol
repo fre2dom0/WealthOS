@@ -236,7 +236,7 @@ contract WealthOSCore is Initializable, UUPSUpgradeable, OwnableUpgradeable, Ree
         if (!state.authorizedModules[module]) revert WealthOSTypes.UnauthorizedModule();
         uint256 _vaultOfUser = state.vaultOfUser[user];
         state.vaultAuthorizedModules[_vaultOfUser][module] = true;
-        emit WealthOSTypes.VaultAuthorizedModule(user, _vaultOfUser, module, block.timestamp);
+        emit WealthOSTypes.VaultAuthorizedModule(user, _vaultOfUser, module);
     }
 
     /**
@@ -248,7 +248,7 @@ contract WealthOSCore is Initializable, UUPSUpgradeable, OwnableUpgradeable, Ree
         if (!state.authorizedModules[module]) revert WealthOSTypes.UnauthorizedModule();
         uint256 _vaultOfUser = state.vaultOfUser[user];
         state.vaultAuthorizedModules[_vaultOfUser][module] = false;
-        emit WealthOSTypes.VaultRevokedModule(user, _vaultOfUser, module, block.timestamp);
+        emit WealthOSTypes.VaultRevokedModule(user, _vaultOfUser, module);
     }
 
 
@@ -257,7 +257,7 @@ contract WealthOSCore is Initializable, UUPSUpgradeable, OwnableUpgradeable, Ree
     function createVault(address user) external onlyUserOrServant(user) userShouldNotBeVaultMember(user) {
         state.vaultOfUser[user] = vaultId;
         state.vaultMembers[vaultId].push(user);
-        emit WealthOSTypes.VaultCreated(user, vaultId, block.timestamp);
+        emit WealthOSTypes.VaultCreated(user, vaultId);
         vaultId++;
     }
 
@@ -281,7 +281,7 @@ contract WealthOSCore is Initializable, UUPSUpgradeable, OwnableUpgradeable, Ree
             state.vaultOfUser[member] = _vaultOfUser;
             delete state.vaultApproval[member];
 
-            emit WealthOSTypes.MemberAddedToVault(user, member, vaultId, block.timestamp);
+            emit WealthOSTypes.MemberAddedToVault(user, member, vaultId);
 
             unchecked {++i;}
         }
@@ -305,7 +305,7 @@ contract WealthOSCore is Initializable, UUPSUpgradeable, OwnableUpgradeable, Ree
                     delete state.vaultOfUser[_vaultMembers[j]];
                     _vaultMembers[j] = _vaultMembers[vLen - 1];
                     _vaultMembers.pop();
-                     emit WealthOSTypes.MemberRemovedFromVault(user, member, vaultId, block.timestamp);
+                     emit WealthOSTypes.MemberRemovedFromVault(user, member, vaultId);
                     break;
                 }
                 unchecked {++j;}
@@ -318,9 +318,9 @@ contract WealthOSCore is Initializable, UUPSUpgradeable, OwnableUpgradeable, Ree
     function approveVault(address user, uint256 _vaultId) external onlyUserOrServant(user) userShouldNotBeVaultMember(user) {
         state.vaultApproval[user] = _vaultId;
         if (_vaultId != 0) {
-            emit WealthOSTypes.MemberApprovedTheVault(user, vaultId, block.timestamp);
+            emit WealthOSTypes.MemberApprovedTheVault(user, vaultId);
         } else {
-            emit WealthOSTypes.MemberDisapprovedTheVault(user, vaultId, block.timestamp);
+            emit WealthOSTypes.MemberDisapprovedTheVault(user, vaultId);
         }
     }
 
@@ -344,7 +344,7 @@ contract WealthOSCore is Initializable, UUPSUpgradeable, OwnableUpgradeable, Ree
         // uint256 _vaultOfUser = state.vaultOfUser[user];
 
         // _updateVaultNativeBalance(_vaultOfUser, amount, WealthOSTypes.Operations.ADDITION);
-        // emit WealthOSTypes.NativeTokenDeposited(user, amount, block.timestamp);
+        // emit WealthOSTypes.NativeTokenDeposited(user, amount);
         WealthOSLibrary_UserOperations.depositNative(state);
     }
 
@@ -397,7 +397,7 @@ contract WealthOSCore is Initializable, UUPSUpgradeable, OwnableUpgradeable, Ree
 
         //     // Transfer from core to module
         //     IERC20(token).safeTransfer(module, amount);
-        //     emit WealthOSTypes.ModuleTokenWithdraw(user, module, token, amount, block.timestamp);
+        //     emit WealthOSTypes.ModuleTokenWithdraw(user, module, token, amount);
 
         //     unchecked { ++i; }
         // }
@@ -431,7 +431,7 @@ contract WealthOSCore is Initializable, UUPSUpgradeable, OwnableUpgradeable, Ree
         //     (bool success, ) = payable(module).call{value: amount}("");
         //     if (!success) revert WealthOSTypes.NativeTransferFailed();
 
-        //     emit WealthOSTypes.ModuleNativeTokenWithdraw(user, module, amount, block.timestamp);
+        //     emit WealthOSTypes.ModuleNativeTokenWithdraw(user, module, amount);
         //     unchecked { ++i; }
         // }
 
@@ -464,7 +464,7 @@ contract WealthOSCore is Initializable, UUPSUpgradeable, OwnableUpgradeable, Ree
 
         //     // Transfers from module to core
         //     IERC20(token).safeTransferFrom(module, address(this), amount);
-        //     emit WealthOSTypes.ModuleTokenDeposited(user, module, token, amount, block.timestamp);
+        //     emit WealthOSTypes.ModuleTokenDeposited(user, module, token, amount);
 
         //     unchecked { ++i; }
         // }
@@ -496,7 +496,7 @@ contract WealthOSCore is Initializable, UUPSUpgradeable, OwnableUpgradeable, Ree
         //     if (_vaultOfUser == 0) revert WealthOSTypes.UserIsMemberOfAVault();
 
         //     _updateVaultNativeBalance(_vaultOfUser, amount, WealthOSTypes.Operations.ADDITION);            
-        //     emit WealthOSTypes.ModuleNativeTokenDeposited(user, module, amount, block.timestamp);
+        //     emit WealthOSTypes.ModuleNativeTokenDeposited(user, module, amount);
 
         //     unchecked { ++i; }
         // }
