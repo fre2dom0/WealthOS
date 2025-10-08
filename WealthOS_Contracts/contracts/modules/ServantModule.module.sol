@@ -34,10 +34,10 @@ contract WealthOSServantModule is Initializable, AccessControlUpgradeable, UUPSU
     error ZeroAddress();
 
     // --- EVENTS ---
-    event Approved(address indexed user, bytes4 selector, uint256 time, uint256 timestamp);
-    event FunctionRevoked(address indexed user, bytes4 selector, uint256 timestamp);
-    event Revoked(address indexed user, uint256 timestamp);
-    event Executed(address indexed user, address indexed module, bytes data, uint256 timestamp);
+    event Approved(address indexed user, bytes4 selector, uint256 time);
+    event FunctionRevoked(address indexed user, bytes4 selector);
+    event Revoked(address indexed user);
+    event Executed(address indexed user, address indexed module, bytes data);
 
     /// @custom:oz-upgrades-unsafe-allow constructor
     constructor(address forwarder) ERC2771ContextUpgradeable(forwarder) {
@@ -63,7 +63,7 @@ contract WealthOSServantModule is Initializable, AccessControlUpgradeable, UUPSU
         if (fnSelectors.length == 0 ) {
             if (time == 0) revert CannotApproveIfTimeIsZeroWithoutFunctionSelectors();
             allFnsApproved[USER] = true;
-            emit Approved(USER, bytes4(0), time, TIMESTAMP);
+            emit Approved(USER, bytes4(0), time);
         } 
         else {
             for (uint i; i < fnSelectors.length; ) {
@@ -71,10 +71,10 @@ contract WealthOSServantModule is Initializable, AccessControlUpgradeable, UUPSU
 
                 if (!isFnApproved[USER][fnSelector] && fnSelector != bytes4(0)) {
                     isFnApproved[USER][fnSelector] = true;
-                    emit Approved(USER, fnSelector, time, TIMESTAMP);
+                    emit Approved(USER, fnSelector, time);
                 }
 
-                emit Approved(USER, fnSelector, time, TIMESTAMP);
+                emit Approved(USER, fnSelector, time);
                 unchecked { ++i; }
             }
 
@@ -86,14 +86,13 @@ contract WealthOSServantModule is Initializable, AccessControlUpgradeable, UUPSU
 
     function revokeFunctions(bytes4[] calldata fnSelectors) external {
         address USER= _msgSender();
-        uint256 TIMESTAMP = block.timestamp;
         for (uint i; i < fnSelectors.length; ) {
             bytes4 fnSelector = fnSelectors[i];
             if (isFnApproved[USER][fnSelector] && fnSelector != bytes4(0)) {
                 isFnApproved[USER][fnSelector] = false;
             }
 
-            emit FunctionRevoked(USER, fnSelector, TIMESTAMP);
+            emit FunctionRevoked(USER, fnSelector);
             unchecked { ++i; }
         }
     }
@@ -101,7 +100,7 @@ contract WealthOSServantModule is Initializable, AccessControlUpgradeable, UUPSU
     function revoke() external {
         address USER = _msgSender();
         userApprovalExpiry[USER] = 0;
-        emit Revoked(USER, block.timestamp);
+        emit Revoked(USER);
     }
 
     function execute(address user, address module, bytes calldata data) external onlyRole(SERVANT_ROLE) nonReentrant returns (bytes memory returnData) {   
@@ -120,7 +119,7 @@ contract WealthOSServantModule is Initializable, AccessControlUpgradeable, UUPSU
         (success, returnData) = module.call(data);
         if(!success) revert FunctionCallFailure(data);
         
-        emit Executed(user, module, data, block.timestamp);
+        emit Executed(user, module, data);
         return returnData;
     }
 
