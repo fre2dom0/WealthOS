@@ -6,7 +6,8 @@ class Database {
     private db;
     constructor(config: any) {
         this.pgp = pgPromise();
-        this.db = this.pgp(config);
+        this.db = this.pgp('');
+        this.db.connect()
     }
 
     public query(query: string, params?: any[]) {

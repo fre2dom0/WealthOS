@@ -26,7 +26,7 @@ export const createSessionService = async (session: Partial<SessionData>, addres
         delete session.nonce;
         session.address = address;
         
-        devLog(`✅ Session successfully created : ${session.address}`) 
+        devLog(`Session successfully created : ${session.address}`, 'SUCCESS'); 
     } catch (err: unknown) {
         throw err;
     }
@@ -47,9 +47,9 @@ export const checkSessionService = (sessionID: string, session: Partial<SessionD
         }
 
         if (availability) {
-            devLog(`✅ ${sessionID} - ${session.address} has a session.`)
+            devLog(`${sessionID} - ${session.address} has a session.`, 'SUCCESS');
         } else {
-            devLog(`⛔ ${sessionID} has no session.`)
+            devLog(`${sessionID} has no session.`, 'DENIED');
         } 
 
         return availability
@@ -75,7 +75,7 @@ export const nonceService = (session: Partial<SessionData>): string => {
             expiresAt: expireTime
         };
 
-        devLog(`✅ Nonce successfully created: ${nonce}`);
+        devLog(`Nonce successfully created: ${nonce}`, 'SUCCESS');
         return nonce;
     } catch (err: unknown) {
         throw err;

@@ -83,16 +83,22 @@ library WealthOSTypes {
 
     event ModuleAuthorized(address module);
     event ModuleRevoked(address module);
-    event UserAuthorizedModule(address indexed user, address indexed module, uint256 timestamp);
-    event UserRevokedModule(address indexed user, address indexed module, uint256 timestamp);
+    event VaultAuthorizedModule(address indexed user, uint256 indexed vaultId, address indexed module);
+    event VaultRevokedModule(address indexed user, uint256 indexed vaultId, address indexed module);
 
-    event TokenDeposited(address indexed user, address indexed token, uint256 amount, uint256 timestamp);
-    event TokenWithdrawn(address indexed user, address indexed token, uint256 amount, uint256 timestamp);
-    event NativeTokenDeposited(address indexed user, uint256 amount, uint256 timestamp);
-    event NativeTokenWithdrawn(address indexed user, uint256 amount, uint256 timestamp);
+    event TokenDeposited(address indexed user, uint256 indexed vaultId, address indexed token, uint256 amount);
+    event TokenWithdrawn(address indexed user, uint256 indexed vaultId, address indexed token, uint256 amount);
+    event NativeTokenDeposited(address indexed user, uint256 indexed vaultId, uint256 amount);
+    event NativeTokenWithdrawn(address indexed user, uint256 indexed vaultId, uint256 amount);
     
-    event ModuleTokenWithdraw(address indexed user, address indexed module, address indexed token, uint256 amount, uint256 timestamp);
-    event ModuleTokenDeposited(address indexed user, address indexed module, address indexed token, uint256 amount, uint256 timestamp);
-    event ModuleNativeTokenWithdraw(address indexed user, address indexed module, uint256 amount, uint256 timestamp);
-    event ModuleNativeTokenDeposited(address indexed user, address indexed module, uint256 amount, uint256 timestamp);
+    event ModuleTokenWithdraw(uint256 indexed vaultId, address indexed module, address indexed token, uint256 amount);
+    event ModuleTokenDeposited(uint256 indexed vaultId, address indexed module, address indexed token, uint256 amount);
+    event ModuleNativeTokenWithdraw(uint256 indexed vaultId, address indexed module, uint256 amount);
+    event ModuleNativeTokenDeposited(uint256 indexed vaultId, address indexed module, uint256 amount);
+
+    event VaultCreated(address indexed user, uint256 indexed vaultId);
+    event MemberAddedToVault(address indexed user, address indexed member, uint256 indexed vaultId);
+    event MemberRemovedFromVault(address indexed user, address indexed member, uint256 indexed vaultId);
+    event MemberApprovedTheVault(address indexed member, uint256 indexed vaultId);
+    event MemberDisapprovedTheVault(address indexed member, uint256 indexed vaultId);
 }

@@ -1,4 +1,4 @@
-import type {ModuleWallets} from '../../types/module-wallets.config.type.js';
+import type {BlockchainAddresses} from '../../types/module-wallets.config.type.js';
 
 import { requireEnv } from '../utils/requireEnv.util.js';
 import { validateWalletAddress } from '../utils/validators.util.js';
@@ -18,7 +18,7 @@ const getEnvironmentVariables = () => {
         if (!isValidWalletAddress) throw new ApiError(MESSAGE + incorrect_variable + ' - ' + variable);
     }
     try {
-        infoLog(`⏳ Preparing wallet configurations...`);
+        infoLog(`Preparing blockchain configurations...`, 'WAITING');
         
         const forwarder_contract_address = requireEnv('FORWARDER_CONTRACT_ADDRESS');
         validateEnvironmentAddressVariable(forwarder_contract_address, 'FORWARDER_CONTRACT_ADDRESS');
@@ -39,7 +39,7 @@ const getEnvironmentVariables = () => {
         const chain_name = requireEnv('CHAIN')
         const chain = getChainByName(chain_name);
 
-		infoLog(`✅ Wallet configuration is ready.`);
+		infoLog(`Blockchain configuration is ready.`, 'SUCCESS');
         return {
             servant_contract_address: servant_contract_address as `0x${string}`,
             servant_account_address: servant_account_address as `0x${string}`,
@@ -55,7 +55,7 @@ const getEnvironmentVariables = () => {
 
 const { servant_contract_address, servant_account_address, servant_account_private_key, owner_account_address, owner_account_private_key} = getEnvironmentVariables();
 
-const WALLET_CONFIG: ModuleWallets = {
+const ADDRESS_CONFIG: BlockchainAddresses = {
     servant_contract_address,
     servant_account_address,
     servant_account_private_key,
@@ -63,4 +63,4 @@ const WALLET_CONFIG: ModuleWallets = {
     owner_account_private_key
 }
 
-export default WALLET_CONFIG;
+export default ADDRESS_CONFIG;

@@ -8,5 +8,3 @@ WealthOSCore Proxy Address: 0x7824fd4a293aa58ebd02acbca7002d526dffe593
 -------------------------
 ScheduledTransfer Implementation Address: 0x13572594bf5c31bb54888ae5c1fbe34bc8769331
 ScheduledTransfer Proxy Address: 0x3c92eb6ea171910e1f32313d79d5907ad272713b
--------------------------
-SEPOLIA MOCK TOKEN: 0x1c7D4B196Cb0C7B01d743Fbc6116a902379C7238 (USDC)

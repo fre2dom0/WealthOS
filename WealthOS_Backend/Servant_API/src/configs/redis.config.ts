@@ -3,10 +3,10 @@ import ApiError from "../errors/ApiError.error.js"
 import { infoLog } from "../utils/consoleLoggers.util.js"
 
 // Initialize client.
-infoLog('⏳ Initializing redis...')
-const redisClient = createClient()
+infoLog('Initializing redis...', 'WAITING');
+const redisClient = createClient();
 redisClient.connect().catch((err) => ApiError.fatalError(err));
-infoLog('✅ Redis initialized.')
+infoLog('Redis initialized.', 'SUCCESS');
 
 export default redisClient;
 

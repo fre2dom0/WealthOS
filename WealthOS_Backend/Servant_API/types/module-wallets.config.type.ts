@@ -1,4 +1,4 @@
-export type ModuleWallets = {
+export type BlockchainAddresses = {
     servant_contract_address: `0x${string}`;
     servant_account_address: `0x${string}`;
     servant_account_private_key: `0x${string}`;

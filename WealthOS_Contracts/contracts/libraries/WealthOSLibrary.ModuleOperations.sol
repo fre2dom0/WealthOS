@@ -42,7 +42,7 @@ library WealthOSLibrary_ModuleOperations {
 
             // Transfer from core to module
             IERC20(token).safeTransfer(module, amount);
-            emit WealthOSTypes.ModuleTokenWithdraw(user, module, token, amount, block.timestamp);
+            emit WealthOSTypes.ModuleTokenWithdraw(_vaultOfUser, module, token, amount, block.timestamp);
 
             unchecked { ++i; }
         }
@@ -81,7 +81,7 @@ library WealthOSLibrary_ModuleOperations {
             (bool success, ) = payable(module).call{value: amount}("");
             if (!success) revert WealthOSTypes.NativeTransferFailed();
 
-            emit WealthOSTypes.ModuleNativeTokenWithdraw(user, module, amount, block.timestamp);
+            emit WealthOSTypes.ModuleNativeTokenWithdraw(_vaultOfUser, module, amount, block.timestamp);
             unchecked { ++i; }
         }
     }
@@ -114,7 +114,7 @@ library WealthOSLibrary_ModuleOperations {
 
             // Transfers from module to core
             IERC20(token).safeTransferFrom(module, address(this), amount);
-            emit WealthOSTypes.ModuleTokenDeposited(user, module, token, amount, block.timestamp);
+            emit WealthOSTypes.ModuleTokenDeposited(_vaultOfUser, module, token, amount, block.timestamp);
 
             unchecked { ++i; }
         }
@@ -148,7 +148,7 @@ library WealthOSLibrary_ModuleOperations {
             if (_vaultOfUser == 0) revert WealthOSTypes.UserIsNotMemberOfAVault();
 
             _updateVaultNativeBalance(state, _vaultOfUser, amount, WealthOSTypes.Operations.ADDITION);            
-            emit WealthOSTypes.ModuleNativeTokenDeposited(user, module, amount, block.timestamp);
+            emit WealthOSTypes.ModuleNativeTokenDeposited(_vaultOfUser, module, amount, block.timestamp);
 
             unchecked { ++i; }
         }

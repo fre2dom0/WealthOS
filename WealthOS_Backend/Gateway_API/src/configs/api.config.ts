@@ -49,7 +49,7 @@ const getEnvironmentVariables = (): { node_env: NodeEnv, deploy_type: DeployType
             });
             devLog(`\t🔐 ALLOWED_ORIGINS: ${allowed_origins}`);
 
-            infoLog(`✅ API config is ready`);
+            infoLog(`API config is ready`);
 
             return {
                 node_env,
@@ -59,7 +59,7 @@ const getEnvironmentVariables = (): { node_env: NodeEnv, deploy_type: DeployType
                 allowed_origins
             };
         } else {
-            devLog(`⚠️ Unknown ENVIRONMENT_NAME: ${ENVIRONMENT_NAME} - Preparing default settings...`);
+            devLog(`Unknown ENVIRONMENT_NAME: ${ENVIRONMENT_NAME} - Preparing default settings...`);
             return {
                 node_env: 'development',
                 deploy_type: 'local',

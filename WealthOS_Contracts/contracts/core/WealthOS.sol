@@ -236,7 +236,7 @@ contract WealthOSCore is Initializable, UUPSUpgradeable, OwnableUpgradeable, Ree
         if (!state.authorizedModules[module]) revert WealthOSTypes.UnauthorizedModule();
         uint256 _vaultOfUser = state.vaultOfUser[user];
         state.vaultAuthorizedModules[_vaultOfUser][module] = true;
-        emit WealthOSTypes.UserAuthorizedModule(user, module, block.timestamp);
+        emit WealthOSTypes.VaultAuthorizedModule(user, _vaultOfUser, module, block.timestamp);
     }
 
     /**
@@ -248,7 +248,7 @@ contract WealthOSCore is Initializable, UUPSUpgradeable, OwnableUpgradeable, Ree
         if (!state.authorizedModules[module]) revert WealthOSTypes.UnauthorizedModule();
         uint256 _vaultOfUser = state.vaultOfUser[user];
         state.vaultAuthorizedModules[_vaultOfUser][module] = false;
-        emit WealthOSTypes.UserRevokedModule(user, module, block.timestamp);
+        emit WealthOSTypes.VaultRevokedModule(user, _vaultOfUser, module, block.timestamp);
     }
 
 
@@ -257,6 +257,7 @@ contract WealthOSCore is Initializable, UUPSUpgradeable, OwnableUpgradeable, Ree
     function createVault(address user) external onlyUserOrServant(user) userShouldNotBeVaultMember(user) {
         state.vaultOfUser[user] = vaultId;
         state.vaultMembers[vaultId].push(user);
+        emit WealthOSTypes.VaultCreated(user, vaultId, block.timestamp);
         vaultId++;
     }
 
@@ -269,15 +270,18 @@ contract WealthOSCore is Initializable, UUPSUpgradeable, OwnableUpgradeable, Ree
             address member = members[i];
             if (member == address(0)) revert WealthOSTypes.ZeroAddress();
 
+
             if (state.vaultOfUser[member] != 0) revert WealthOSTypes.UserIsMemberOfAVault();
 
             if (state.vaultApproval[member] != _vaultOfUser) revert WealthOSTypes.UserDidNotApproveTheVault();
 
-            if (state.vaultMembers[_vaultOfUser].length + 1 > WealthOSTypes.MAX_VAULT_MEMBER) revert WealthOSTypes.MaxVaultMemberOverflowed();
+            // if (state.vaultMembers[_vaultOfUser].length + 1 > WealthOSTypes.MAX_VAULT_MEMBER) revert WealthOSTypes.MaxVaultMemberOverflowed();
 
             state.vaultMembers[_vaultOfUser].push(member);
             state.vaultOfUser[member] = _vaultOfUser;
             delete state.vaultApproval[member];
+
+            emit WealthOSTypes.MemberAddedToVault(user, member, vaultId, block.timestamp);
 
             unchecked {++i;}
         }
@@ -293,6 +297,7 @@ contract WealthOSCore is Initializable, UUPSUpgradeable, OwnableUpgradeable, Ree
 
             if (state.vaultOfUser[member] != _vaultOfUser) revert WealthOSTypes.UserIsMemberOfAVault();
 
+            // Remove member
             address[] storage _vaultMembers = state.vaultMembers[_vaultOfUser];
             uint256 vLen = _vaultMembers.length;
             for (uint j; j < vLen;) {
@@ -300,7 +305,7 @@ contract WealthOSCore is Initializable, UUPSUpgradeable, OwnableUpgradeable, Ree
                     delete state.vaultOfUser[_vaultMembers[j]];
                     _vaultMembers[j] = _vaultMembers[vLen - 1];
                     _vaultMembers.pop();
-
+                     emit WealthOSTypes.MemberRemovedFromVault(user, member, vaultId, block.timestamp);
                     break;
                 }
                 unchecked {++j;}
@@ -312,6 +317,11 @@ contract WealthOSCore is Initializable, UUPSUpgradeable, OwnableUpgradeable, Ree
 
     function approveVault(address user, uint256 _vaultId) external onlyUserOrServant(user) userShouldNotBeVaultMember(user) {
         state.vaultApproval[user] = _vaultId;
+        if (_vaultId != 0) {
+            emit WealthOSTypes.MemberApprovedTheVault(user, vaultId, block.timestamp);
+        } else {
+            emit WealthOSTypes.MemberDisapprovedTheVault(user, vaultId, block.timestamp);
+        }
     }
 
     // ------------------------------------------------------------------------------ //
@@ -496,9 +506,6 @@ contract WealthOSCore is Initializable, UUPSUpgradeable, OwnableUpgradeable, Ree
     }
 
     // ------------------------------------------------------------------ //
-
-    
-    // ------------------------------------------------------------ //
 
     function version() external pure returns(string memory) {
         return '1.0.0';

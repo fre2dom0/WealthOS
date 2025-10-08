@@ -31,7 +31,7 @@ class ApiError extends Error {
      * Ends the program
      */
     public static fatalError(err: unknown): never {
-        errorLog('❌ Fatal error occurred');
+        errorLog('Fatal error occurred');
         if (err instanceof ApiError) errorLog(`${err.message}, ${err.code}, ${err.stack}`);
         else errorLog(err);
         process.exit(1);

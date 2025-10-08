@@ -6,11 +6,11 @@ import { RedisStore } from 'connect-redis';
 import redisClient from './redis.config.js';
 
 
-infoLog('⏳ Preparing session configurations...')
+infoLog('Preparing session configurations...', 'WAITING');
 
 // Initialize store.
 
-const prefix:string = API_CONFIG.is_test ? 'Test-WealthOS-Session' : 'WealthOS-Session'; 
+const prefix: string = API_CONFIG.is_test ? 'Test-WealthOS-Session' : 'WealthOS-Session';
 
 const redisStore = new RedisStore({
     client: redisClient,
@@ -35,7 +35,7 @@ const SESSION_CONFIG: SessionOptions = {
     devLog(`\t${chalk.bold(`- ${key}: ${JSON.stringify(value)}`)}`);
 });
 
-infoLog('✅ Session configuration is ready.')
+infoLog('Session configuration is ready.', 'SUCCESS');
 
 export default SESSION_CONFIG;
 

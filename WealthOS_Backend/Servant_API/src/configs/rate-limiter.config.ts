@@ -8,7 +8,7 @@ import API_CONFIG from './api.config.js';
 let count_of_rate_limiter: number = 0;
 
 // Create and use the rate limiter
-infoLog('⏳ Preparing rate limiter configurations...')
+infoLog('Preparing rate limiter configurations...', 'WAITING');
 export const RATE_LIMITER_CONFIG: Partial<Options> = {
 	// Rate limiter configuration
 	windowMs: 1 * 60 * 1000, // 1 minutes
@@ -32,7 +32,7 @@ export const RATE_LIMITER_CONFIG: Partial<Options> = {
  */
 export const useRateLimit = (limit?: number, windowMs?: number): RateLimitRequestHandler => {
 	const prefix:string = API_CONFIG.is_test ? `Test-WealthOS-Rate-Limiter-${count_of_rate_limiter}` : `WealthOS-Rate-Limiter-${count_of_rate_limiter}`; 
-	devLog(`⏳ Preparing rate-limiter configuration ${prefix} :`)
+	devLog(`Preparing rate-limiter configuration ${prefix} :`, 'WAITING')
 	
 	const NEW_RATE_LIMITER_CONFIG: Partial<Options> = Object.assign({}, RATE_LIMITER_CONFIG, {
 		limit: limit ?? RATE_LIMITER_CONFIG.limit,
@@ -43,7 +43,7 @@ export const useRateLimit = (limit?: number, windowMs?: number): RateLimitReques
 		}),
 	});
 
-	devLog(`✅ Rate-Limiter configuration is ready - ${prefix} :`)
+	devLog(`Rate-Limiter configuration is ready - ${prefix} :`, 'SUCCESS')
 	Object.entries(NEW_RATE_LIMITER_CONFIG).forEach(([key, value]) => {
 		devLog(`\t- ${key}: ${value}`)
 	})
@@ -53,6 +53,6 @@ export const useRateLimit = (limit?: number, windowMs?: number): RateLimitReques
 }
 
 const mainRateLimit = useRateLimit();
-infoLog('✅ Rate limiter config is ready.')
+infoLog('Rate limiter config is ready.', 'SUCCESS');
 
 export default mainRateLimit;

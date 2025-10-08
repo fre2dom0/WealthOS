@@ -9,10 +9,10 @@ import { infoLog } from '../utils/consoleLoggers.util.js';
 
 try {
 	const FILE_PATH: string = process.cwd();
-	
-	infoLog(`\n⏳ Loading environments...`);
+
+	infoLog(`\nLoading environments...`, 'WAITING');
 	// 1. Load base .env file with safe typing
-	const baseResult: DotenvConfigOutput = dotenv.config({quiet: true});
+	const baseResult: DotenvConfigOutput = dotenv.config({ quiet: true });
 	if (baseResult.error instanceof Error) {
 		throw new Error(`Failed to load base .env: ${baseResult.error.message}`);
 	}
@@ -29,25 +29,40 @@ try {
 	if (fs.existsSync(customEnvPath)) {
 		const overrideResult = dotenv.config({ path: customEnvPath, override: true, quiet: true });
 		if (overrideResult.error) {
-			throw new ApiError(`Failed to load custom env file: ${overrideResult.error.message}`);
+			throw new ApiError(`Failed to load ${envFileSuffix} file: ${overrideResult.error.message}`);
 		}
-		
-		infoLog(`✅ Environment loaded - ENV File: env.${envFileSuffix}`);
+
+		infoLog(`Environment loaded - ENV File: ${envFileSuffix}`, 'SUCCESS');
 	} else {
-		infoLog(`⚠️ Custom env file not found: ${customEnvPath}`);
+		infoLog(`Custom env file not found: ${customEnvPath}`, 'WARNING');
 	}
 
 	// 5. Load env.chain
 	envFileSuffix = `.env.chain`
 	customEnvPath = path.resolve(FILE_PATH, envFileSuffix);
-	if(fs.existsSync(customEnvPath)) {
+	if (fs.existsSync(customEnvPath)) {
 		const result = dotenv.config({ path: customEnvPath, quiet: true });
 
 		if (result.error) {
-			throw new ApiError(`Failed to load custom env file: ${result.error.message}`);
+			throw new ApiError(`Failed to load ${envFileSuffix} env file: ${result.error.message}`);
 		}
 
-		infoLog(`✅ Environment loaded - ENV File: ${envFileSuffix}`);
+		infoLog(`Environment loaded - ENV File: ${envFileSuffix}`, 'SUCCESS');
+	} else {
+		throw new ApiError(`Failed to load custom env file: ${envFileSuffix}`);
+	}
+
+	// 6. Load env.database
+	envFileSuffix = `.env.database`
+	customEnvPath = path.resolve(FILE_PATH, envFileSuffix);
+	if (fs.existsSync(customEnvPath)) {
+		const result = dotenv.config({ path: customEnvPath, quiet: true });
+
+		if (result.error) {
+			throw new ApiError(`Failed to load ${envFileSuffix} file: ${result.error.message}`);
+		}
+
+		infoLog(`Environment loaded - ENV File: ${envFileSuffix}`, 'SUCCESS');
 	} else {
 		throw new ApiError(`Failed to load custom env file: ${envFileSuffix}`);
 	}

@@ -16,7 +16,7 @@ const getEnvironmentVariables = (): { chain_env: ChainEnv, node_env: NodeEnv, de
     try {
         if (ENVIRONMENT_NAME === 'LOCAL_DEVELOPMENT') {
             const node_env = requireEnv('NODE_ENV');
-            infoLog(`⏳ Preparing API configurations...`);
+            infoLog(`Preparing API configurations...`, 'WAITING');
 
             if (node_env !== 'development' && node_env !== 'stage' && node_env !== 'production') {
                 throw new ApiError(`Invalid NODE_ENV: ${node_env}`);
@@ -56,7 +56,7 @@ const getEnvironmentVariables = (): { chain_env: ChainEnv, node_env: NodeEnv, de
             });
             devLog(`\t🔐 ${chalk.bold(`ALLOWED_ORIGINS: ${allowed_origins}`)} `);
 
-            infoLog(`✅ API config is ready`);
+            infoLog(`API configuration is ready`, 'SUCCESS');
 
             return {
                 chain_env,
@@ -67,7 +67,7 @@ const getEnvironmentVariables = (): { chain_env: ChainEnv, node_env: NodeEnv, de
                 allowed_origins
             };
         } else {
-            devLog(`⚠️ Unknown ENVIRONMENT_NAME: ${ENVIRONMENT_NAME} - Preparing default settings...`);
+            devLog(`Unknown ENVIRONMENT_NAME: ${ENVIRONMENT_NAME} - Preparing default settings...`, 'WARNING');
             return {
                 chain_env: 'testnet',
                 node_env: 'development',
