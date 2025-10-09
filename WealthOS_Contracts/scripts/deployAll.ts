@@ -1,9 +1,11 @@
 import { network } from "hardhat";
+import path from "path";
 const { viem } = await network.connect();
+import fs from 'fs';
 
 const deployAll = async () => {
     const ERC1967Proxy = "ERC1967Proxy";
-    
+
     const walletClients = await viem.getWalletClients();
     const OWNER_ACCOUNT = '0xb60706F3B1c3cA291f49BE4a840314a92eEbb12d';
     const SERVANT_ACCOUNT = '0xb27924877CADCEdd2DE4fAf47F71ca50C55EC070';
@@ -51,7 +53,7 @@ const deployAll = async () => {
     } catch (err) {
         console.error("❌ WealthOSCoreProxy.initialize failed:", err);
     }
-    
+
     console.log('-------------------------')
 
     // Scheduled Transfer Module
@@ -70,8 +72,25 @@ const deployAll = async () => {
         console.error("❌ ScheduledTransferProxy.initialize failed:", err);
     }
 
-};
+    // Write contract addresses to txt file.
+    const currentDir = process.cwd();
+    const content = `Forwarder Address: ${Forwarder.address}
+-------------------------
+Servant Implementation Address: ${ServantImp.address}
+Servant Proxy Address: ${ServantProxy.address}
+-------------------------
+WealthOSCore Implementation Address: ${WealthOSCoreImp.address}
+WealthOSCore Proxy Address: ${WealthOSCoreProxy.address}
+-------------------------
+ScheduledTransfer Implementation Address: ${ScheduledTransferImp.address}
+ScheduledTransfer Proxy Address: ${ScheduledTransferProxy.address}
 
+`
+    fs.writeFileSync(currentDir + '/contracts.txt', content)
+
+
+};
+2
 deployAll()
     .then(() => process.exit(0))
     .catch((error) => {
