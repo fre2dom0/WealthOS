@@ -4,7 +4,6 @@ import { requireEnv } from '../utils/requireEnv.util.js';
 import { validateWalletAddress } from '../utils/validators.util.js';
 import { infoLog } from '../utils/consoleLoggers.util.js';
 import ApiError from '../errors/ApiError.error.js';
-import { getChainByName } from '../utils/chain.util.js';
 
 const MESSAGE = 'Invalid environment variable : ';
 
@@ -37,7 +36,6 @@ const getEnvironmentVariables = () => {
         const owner_account_private_key = requireEnv('OWNER_ACCOUNT_PRIVATE_KEY');
 
         const chain_name = requireEnv('CHAIN')
-        const chain = getChainByName(chain_name);
 
 		infoLog(`Blockchain configuration is ready.`, 'SUCCESS');
         return {

@@ -1,12 +1,11 @@
-Forwarder Address: 0xe17e0c56430e0e7f1878022adc4599e8ef958ec0
+Forwarder Address: 0x52fecd7877f91ccf35ed557aa99bb24429c58099
 -------------------------
-Servant Implementation Address: 0x56d61a51071ee89e313a0c04a721ae341f547257
-Servant Proxy Address: 0x14e0479e8c72e26fea71ec3c4acc98f80134706e
+Servant Implementation Address: 0x1777d02715ca7c09ae89380464fa90df9c4054e3
+Servant Proxy Address: 0x10806f1f9019f3ba43e7811322324d819eda0e05
 -------------------------
-WealthOSCore Implementation Address: 0xec6888fec28218d6751abc435a5481809d79d6ad
-WealthOSCore Proxy Address: 0x7824fd4a293aa58ebd02acbca7002d526dffe593
+WealthOSCore Implementation Address: 0x216e8161413f2960daa9b3b777685355ff8c8124
+WealthOSCore Proxy Address: 0x47a5a88b48c1924a7cff71a87b47f608530b3e34
 -------------------------
-ScheduledTransfer Implementation Address: 0x13572594bf5c31bb54888ae5c1fbe34bc8769331
-ScheduledTransfer Proxy Address: 0x3c92eb6ea171910e1f32313d79d5907ad272713b
--------------------------
-SEPOLIA MOCK TOKEN: 0x1c7D4B196Cb0C7B01d743Fbc6116a902379C7238 (USDC)
+ScheduledTransfer Implementation Address: 0xb1e20cf2ce9bfd386dc2c74ce5839b8464ba9f69
+ScheduledTransfer Proxy Address: 0x57cd8d3760717c41236a14896a79ce0fe8e81ccf
+

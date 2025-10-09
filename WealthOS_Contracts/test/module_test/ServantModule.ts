@@ -219,7 +219,7 @@ describe('Servant Module', async () => {
     })
 
     describe('Revoke', () => {
-        const fnSelector = toFunctionSelector('qqqqqqqqq')
+        const fnSelector = toFunctionSelector('function balanceOf(address account)')
 
         beforeEach(async () => {
             await ServantProxy.write.approve([3600n, [fnSelector]]);
@@ -229,7 +229,7 @@ describe('Servant Module', async () => {
             let expiryTime = Number(await ServantProxy.read.userApprovalExpiry([DEPLOYER_ADDRESS]));
             expect(expiryTime).to.be.greaterThan(0);
 
-            await ServantProxy.write.revoke();
+            await ServantProxy.write.revoke([true, []]);
 
             expiryTime = Number(await ServantProxy.read.userApprovalExpiry([DEPLOYER_ADDRESS]));
             expect(expiryTime).to.be.equal(0);
@@ -239,10 +239,24 @@ describe('Servant Module', async () => {
             let isFnApproved = await ServantProxy.read.isFnApproved([DEPLOYER_ADDRESS, fnSelector]);
             expect(isFnApproved).to.be.true;
 
-            await ServantProxy.write.revokeFunctions([[fnSelector]]);
+            await ServantProxy.write.revoke([false, [fnSelector]]);
 
             isFnApproved = await ServantProxy.read.isFnApproved([DEPLOYER_ADDRESS, fnSelector]);
             expect(isFnApproved).to.be.false;
+        })
+
+        it('Should revert if user already revoked time', async () => {
+            let reverted = false;
+            try {
+                await ServantProxy.write.revoke([true, []]);
+                await ServantProxy.write.revoke([true, []]);
+            } catch (err: any) {
+                if(err.details.includes('AlreadyNotApproved')) {
+                    reverted = true;
+                }
+            } finally {
+                expect(reverted).to.be.true;
+            }
         })
     })    
 
@@ -300,7 +314,8 @@ describe('Servant Module', async () => {
         it('Should revert if approval expired', async () => {
             let reverted = false;
             try {
-                await ServantProxy.write.revoke();
+                await ServantProxy.write.approve([3600n, []]);
+                await ServantProxy.write.revoke([true, []]);
                 await ServantProxy.simulate.execute([DEPLOYER_ADDRESS, MockToken.address, encodedFn], {account: EXECUTOR_ADDRESS});
             } catch (err: any) {
                 if(err.details.includes('ApprovalExpired')) {

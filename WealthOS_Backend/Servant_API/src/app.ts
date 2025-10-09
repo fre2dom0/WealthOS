@@ -1,4 +1,4 @@
-import type {ExtendedLog} from '../types/viem-extended.type.js'
+import type { ApprovedEvent } from './models/approved.model.js';
 
 import './libs/loadEnv.lib.js';
 import './configs/api.config.js';
@@ -12,9 +12,11 @@ import servant_abi from './configs/jsons/servant_artifact.json' with {type: 'jso
 
 import createApp from "./libs/createApp.lib.js";
 import { publicClient } from './libs/blockchain.lib.js';
-import { decodeEventLog } from 'viem';
+import { decodeEventLog, hexToBigInt, type Log } from 'viem';
 import { errorLog } from './utils/consoleLoggers.util.js';
 import { Database } from './libs/database.lib.js';
+import { getBlockTimestamp } from './utils/blockchain.util.js';
+import { EVENT_TO_EVENT_TABLE } from '../types/database.config.type.js';
 
 // Start database
 Database.getInstance(connectionString);
@@ -23,10 +25,11 @@ Database.getInstance(connectionString);
 const unwatch = publicClient.watchEvent({
     address: ADDRESS_CONFIG.servant_contract_address,
     onLogs: logs => {
-        const executeQuery = async (data: object, table: string) => {
+        const executeQuery = async (data: ApprovedEvent, table: string) => {
+            data.block_timestamp = await getBlockTimestamp(data.block_hash);
             const db = Database.getInstance(connectionString);
             const sql = `
-                INSERT INTO events.approved (
+                INSERT INTO events.${table} (
                     topics, data, block_hash, block_number, block_timestamp,
                     transaction_hash, transaction_index, log_index, removed,
                     stored_at, args
@@ -36,35 +39,40 @@ const unwatch = publicClient.watchEvent({
                     $10, $11
                 )
             `;
+
+            await db.none(sql, [data.topics, data.data, data.block_hash, data.block_number, data.block_timestamp, data.transaction_hash, data.transaction_index, data.log_index, data.removed, data.stored_at, data.args]);
         }
 
         try {
-            logs.forEach((l: ExtendedLog) => {
+            logs.forEach((l: Log) => {
+
                 const decodedEventLog = decodeEventLog({
                     abi: servant_abi.abi,
                     data: l.data,
                     topics: l.topics
                 })
                 
-                const data = {
+                // TODO throw an error
+                if (!decodedEventLog.eventName) return;
+                const table = EVENT_TO_EVENT_TABLE[decodedEventLog.eventName as string];
+
+                if (!table) return;
+
+                const data: ApprovedEvent = {
                     topics: l.topics,
                     data: l.data,
-                    block_hash: l.blockHash,
-                    block_number: l.blockNumber,
-                    block_timestamp: l.blockTimestamp,
-                    transaction_hash: l.transactionHash,
-                    transaction_index: l.transactionIndex,
-                    log_index: l.logIndex,
-                    removed: l.removed,
+                    block_hash: l.blockHash!,
+                    block_number: l.blockNumber ?? 0n,
+                    block_timestamp: 0n,
+                    transaction_hash: l.transactionHash!,
+                    transaction_index: l.transactionIndex ?? 0,
+                    log_index: l.logIndex ?? 0,
+                    removed: l.removed ?? false,
                     stored_at: new Date().toISOString(),
-                    args: JSON.stringify(decodedEventLog.args)
+                    args: decodedEventLog.args ?? {}
                 }
 
-                console.log('Decoded event log : ');
-                console.log(decodedEventLog);
-                // decoded
-                
-                
+                executeQuery(data, table);
             })
         } catch (err: unknown) {
             errorLog(`An error occurred while watching events : ${err}`);

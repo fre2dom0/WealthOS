@@ -25,6 +25,7 @@ contract WealthOSServantModule is Initializable, AccessControlUpgradeable, UUPSU
     // --- ERRORS ---
     error NotApproved();
     error ApprovalExpired();
+    error AlreadyNotApproved();
     error ApprovalTimeOutOfRange(uint256 providedTime, uint256 min, uint256 max);
     error CannotApproveIfTimeIsZeroWithoutFunctionSelectors();
     error EmptyFunctionSelector();
@@ -34,9 +35,8 @@ contract WealthOSServantModule is Initializable, AccessControlUpgradeable, UUPSU
     error ZeroAddress();
 
     // --- EVENTS ---
-    event Approved(address indexed user, bytes4 selector, uint256 time);
-    event FunctionRevoked(address indexed user, bytes4 selector);
-    event Revoked(address indexed user);
+    event Approved(address indexed user, bytes4[] selector, uint256 time);
+    event Revoked(address indexed user, bytes4[] selector, bool timeResetted);
     event Executed(address indexed user, address indexed module, bytes data);
 
     /// @custom:oz-upgrades-unsafe-allow constructor
@@ -63,7 +63,6 @@ contract WealthOSServantModule is Initializable, AccessControlUpgradeable, UUPSU
         if (fnSelectors.length == 0 ) {
             if (time == 0) revert CannotApproveIfTimeIsZeroWithoutFunctionSelectors();
             allFnsApproved[USER] = true;
-            emit Approved(USER, bytes4(0), time);
         } 
         else {
             for (uint i; i < fnSelectors.length; ) {
@@ -71,10 +70,8 @@ contract WealthOSServantModule is Initializable, AccessControlUpgradeable, UUPSU
 
                 if (!isFnApproved[USER][fnSelector] && fnSelector != bytes4(0)) {
                     isFnApproved[USER][fnSelector] = true;
-                    emit Approved(USER, fnSelector, time);
                 }
 
-                emit Approved(USER, fnSelector, time);
                 unchecked { ++i; }
             }
 
@@ -82,25 +79,30 @@ contract WealthOSServantModule is Initializable, AccessControlUpgradeable, UUPSU
         }
         
         if (time != 0) userApprovalExpiry[USER] = TIMESTAMP + time;
+        emit Approved(USER, fnSelectors, time);
     }
 
-    function revokeFunctions(bytes4[] calldata fnSelectors) external {
-        address USER= _msgSender();
-        for (uint i; i < fnSelectors.length; ) {
+
+
+    function revoke(bool resetTime, bytes4[] calldata fnSelectors) external {
+        address USER = _msgSender();
+        if (resetTime) {
+            if (userApprovalExpiry[USER] == 0) revert AlreadyNotApproved();
+            userApprovalExpiry[USER] = 0;
+        }
+        
+        uint256 LEN = fnSelectors.length;
+        for (uint i; i < LEN; ) {
             bytes4 fnSelector = fnSelectors[i];
             if (isFnApproved[USER][fnSelector] && fnSelector != bytes4(0)) {
                 isFnApproved[USER][fnSelector] = false;
             }
 
-            emit FunctionRevoked(USER, fnSelector);
             unchecked { ++i; }
         }
-    }
 
-    function revoke() external {
-        address USER = _msgSender();
-        userApprovalExpiry[USER] = 0;
-        emit Revoked(USER);
+        emit Revoked(USER, fnSelectors, resetTime);
+
     }
 
     function execute(address user, address module, bytes calldata data) external onlyRole(SERVANT_ROLE) nonReentrant returns (bytes memory returnData) {   
