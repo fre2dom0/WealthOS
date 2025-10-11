@@ -35,8 +35,8 @@ contract WealthOSServantModule is Initializable, AccessControlUpgradeable, UUPSU
     error ZeroAddress();
 
     // --- EVENTS ---
-    event Approved(address indexed user, bytes4[] selector, uint256 time);
-    event Revoked(address indexed user, bytes4[] selector, bool timeResetted);
+    event Approved(address indexed user, bytes4[] selectors, uint256 time);
+    event Revoked(address indexed user, bytes4[] selectors, bool timeResetted);
     event Executed(address indexed user, address indexed module, bytes data);
 
     /// @custom:oz-upgrades-unsafe-allow constructor

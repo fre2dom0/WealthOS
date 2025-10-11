@@ -39,8 +39,30 @@ const unwatch = publicClient.watchEvent({
                     $10, $11
                 )
             `;
-
+            console.log(table);
             await db.none(sql, [data.topics, data.data, data.block_hash, data.block_number, data.block_timestamp, data.transaction_hash, data.transaction_index, data.log_index, data.removed, data.stored_at, data.args]);
+
+            if (table == 'approved') {
+                const selectors: string[] = data.args.selector;
+                console.log(selectors)
+                if (selectors.length > 0) {
+                    selectors.forEach(async (i) => {
+                        console.log(i)
+                        await db.none(`INSERT INTO public.user_function_approvals (user_address, function_selector) VALUES ($1, $2 )`, [data.args.user, i]);
+                    })
+                }
+            }
+            else if (table == 'revoked') {
+                const selectors: string[] = data.args.selector;
+                console.log(selectors)
+                if (selectors.length > 0) {
+                    selectors.forEach(async (i) => {
+                        console.log(i)
+                        await db.none(`DELETE FROM public.user_function_approvals WHERE user_address = $1 AND function_selector = $2`, [data.args.user, i]);
+                    })
+                }
+            }
+
         }
 
         try {

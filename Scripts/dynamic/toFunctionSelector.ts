@@ -52,7 +52,7 @@ const main = async () => {
 
                 let params: string = '';
                 const len = i.inputs.length;
-                const united_params = i.inputs.map((p: AbiParameter, index: number) => {
+                i.inputs.forEach((p: AbiParameter, index: number) => {
                     params += `${p.type} ${p.name}${index != len - 1 ? ', ' : ''}`
                 })
 

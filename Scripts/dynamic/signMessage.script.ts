@@ -1,7 +1,7 @@
 import { signMessage } from "viem/accounts";
 import { zeroAddress } from "viem";
 import chalk from "chalk";
-import WALLET from "./config.ts"
+import WALLET from "../config.ts"
 
 /**
  *  Creates a signature with given message.
