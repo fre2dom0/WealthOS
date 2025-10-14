@@ -25,14 +25,6 @@ export const createSessionController = async (req: Request, res: Response, next:
     }
 }
 
-export const revokeSessionController = (req: Request, res: Response) => {
-    try {
-        
-    } catch (err: unknown) {
-        
-    }
-}
-
 export const checkSessionController= (req: Request, res: Response, next: NextFunction) => {
     try {
         const availability = checkSessionService(req.sessionID, req.session);

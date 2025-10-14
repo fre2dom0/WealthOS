@@ -10,7 +10,7 @@ infoLog('Preparing session configurations...', 'WAITING');
 
 // Initialize store.
 
-const prefix: string = API_CONFIG.is_test ? 'Test-WealthOS-Session' : 'WealthOS-Session';
+const prefix: string = API_CONFIG.is_test ? 'test-wealthos-session:' : 'wealthos-session';
 
 const redisStore = new RedisStore({
     client: redisClient,
@@ -19,8 +19,8 @@ const redisStore = new RedisStore({
 
 const SESSION_CONFIG: SessionOptions = {
     secret: process.env.SESSION_SECRET || 'supersecret',
-    resave: false,
-    saveUninitialized: false,
+    resave: true,
+    saveUninitialized: true, // ! Does not work with rate limiter if it is false.
     cookie: {
         secure: API_CONFIG.deploy_type == 'local' ? false : true,
         httpOnly: API_CONFIG.deploy_type == 'local' ? false : true,

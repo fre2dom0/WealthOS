@@ -9,9 +9,9 @@ import { errorLog } from "../utils/consoleLoggers.util.js";
  * Exposes stack traces only in development mode for security.
  */
 export const errorHandler = (err: unknown, req: Request, res: Response, next: NextFunction) => {
-    let statusCode = 500;
+    let statusCode: number = 500;
     let code: ApiResponseCode = "SERVER_ERROR";
-    let message = "An unexpected error occurred";
+    let message: string = "An unexpected error occurred";
     let stack: string | undefined;
 
     if (err instanceof ApiError) {
