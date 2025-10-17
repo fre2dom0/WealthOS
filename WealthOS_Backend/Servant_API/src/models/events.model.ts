@@ -35,7 +35,7 @@ export default {
             const values = selectors.map((_: any, i: number) => `($1, $${i + 2})`).join(", ");
             const params = [user, ...selectors];
 
-            return  await db.none(
+            return await db.none(
                 `INSERT INTO public.user_function_selector_approvals (user_address, function_selector)
                 VALUES ${values}
                 ON CONFLICT DO NOTHING`,
