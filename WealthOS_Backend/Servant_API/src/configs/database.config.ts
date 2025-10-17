@@ -2,7 +2,7 @@ import ApiError from "../errors/ApiError.error.js";
 import API_CONFIG from "./api.config.js";
 import { devLog, infoLog } from "../utils/consoleLoggers.util.js";
 import { requireEnv } from "../utils/requireEnv.util.js";
-import type { DatabaseConfig } from "../../types/database.type.js";
+import type { DatabaseConfig } from "../../types/db/database.type.js";
 
 const local_host = 'localhost'
 

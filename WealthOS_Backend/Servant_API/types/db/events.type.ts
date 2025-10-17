@@ -1,12 +1,7 @@
-import type { EventName } from "./blockchain.type.js"
+import type { EventName } from "../blockchain.type.js"
 
-export interface DatabaseConfig {
-    port: number,
-    host: string,
-    database: string,
-    user: string,
-    password: string
-}
+
+export type Tables = 'approved' | 'revoked' | 'executed';
 
 export interface EventData {
     topics: string[];
@@ -22,11 +17,8 @@ export interface EventData {
     args: Record<string, any>; // jsonb
 }
 
-export type Tables = 'approved' | 'revoked' | 'executed';
-
 export const EVENT_TO_EVENT_TABLE: Record<EventName, Tables> = {
     'Approved': 'approved',
     "Revoked": 'revoked',
     "Executed": 'executed'
 }
-

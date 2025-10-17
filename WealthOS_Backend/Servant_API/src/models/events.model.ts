@@ -1,15 +1,11 @@
-import { connectionString } from "../configs/database.config.js";
-import { Database } from "../libs/database.lib.js";
-import type { EventData, Tables } from "../../types/database.type.js";
+import type { EventData, Tables } from "../../types/db/events.type.js";
 import type { ApprovedEvent, RevokedEvent } from "../../types/blockchain.type.js";
 import { errorLog } from "../utils/consoleLoggers.util.js";
-
-
+import { db } from "../app.js";
 
 export default {
     insertEvent: async (data: EventData, table: Tables, is_test: boolean) => {
         try {
-            const db = Database.getInstance(connectionString);
 
             const sql = `
                     INSERT INTO events.${table} (
@@ -23,7 +19,7 @@ export default {
                     )
                 `;
 
-            await db.none(sql, [data.topics, data.data, data.block_hash, data.block_number, data.block_timestamp, data.transaction_hash, data.transaction_index, data.log_index, data.removed, data.stored_at, data.args]);
+            return await db.none(sql, [data.topics, data.data, data.block_hash, data.block_number, data.block_timestamp, data.transaction_hash, data.transaction_index, data.log_index, data.removed, data.stored_at, data.args]);
         } catch (err: unknown) {
             errorLog('An error occurred while inserting event: ' + err);
         }
@@ -32,7 +28,6 @@ export default {
 
     insertApproval: async (args: ApprovedEvent, is_test: boolean) => {
         try {
-            const db = Database.getInstance(connectionString);
             const selectors = args.selector;
             if (args.selector.length == 0) return;
             const user = args.user;
@@ -40,7 +35,7 @@ export default {
             const values = selectors.map((_: any, i: number) => `($1, $${i + 2})`).join(", ");
             const params = [user, ...selectors];
 
-            await db.none(
+            return  await db.none(
                 `INSERT INTO public.user_function_selector_approvals (user_address, function_selector)
                 VALUES ${values}
                 ON CONFLICT DO NOTHING`,
@@ -54,13 +49,11 @@ export default {
 
     deleteApproval: async (args: RevokedEvent, is_test: boolean) => {
         try {
-            const db = Database.getInstance(connectionString);
-
             const selectors: string[] = args.selector;
             if (selectors.length == 0) return;
             const user = args.user;
 
-            await db.none(
+            return await db.none(
                 `DELETE FROM public.user_function_selector_approvals
                     WHERE user_address = $1
                     AND function_selector = ANY($2::text[])`,

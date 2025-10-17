@@ -20,7 +20,7 @@ import { watchServantEvents } from './libs/watchServantContractEvents.lib.js';
  */
 
 // Start database
-Database.getInstance(connectionString);
+export const db = Database.getInstance(connectionString);
 
 // Start watching events
 watchServantEvents();

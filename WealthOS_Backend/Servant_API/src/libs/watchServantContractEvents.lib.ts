@@ -1,10 +1,10 @@
 import type { EventName, EventArgsMap, ApprovedEvent, RevokedEvent } from '../../types/blockchain.type.js';
+import { EVENT_TO_EVENT_TABLE, type EventData, type Tables } from '../../types/db/events.type.js';
 
 import { publicClient } from './blockchain.lib.js';
 import { decodeEventLog, type Log } from 'viem';
 import { devLog, errorLog } from '../utils/consoleLoggers.util.js';
-import { EVENT_TO_EVENT_TABLE, type EventData, type Tables } from '../../types/database.type.js';
-import databaseModel from '../models/database.model.js';
+import databaseModel from '../models/events.model.js';
 import { getBlockTimestamp } from '../utils/blockchain.util.js';
 import ADDRESS_CONFIG from '../configs/chain.config.js';
 import servant_abi from '../configs/jsons/servant_artifact.json' with {type: 'json'};
