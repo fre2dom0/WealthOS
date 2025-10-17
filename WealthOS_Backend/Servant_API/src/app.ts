@@ -15,9 +15,7 @@ import { watchServantEvents } from './libs/watchServantContractEvents.lib.js';
 
 // TODO : 
 /**
- * Prepare test for event listening
- * Prepare test for spam protection
- * Open database data to api.
+ * Open database to the api and test it.
  * Make servant address to execute calls.
  */
 
