@@ -1,6 +1,5 @@
 import type { EventName } from "../blockchain.type.js"
 
-
 export type Tables = 'approved' | 'revoked' | 'executed';
 
 export interface EventData {

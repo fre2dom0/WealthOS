@@ -7,9 +7,7 @@ import { useRateLimit } from "../libs/createRateLimiter.lib.js";
 
 const createSessionRouter = (options?: ServantAppOptions) => {
     const router = Router();
-
-
-
+    
     if (options && options.enableRateLimiter) {
         router.post('/create_session', useRateLimit({limit: 5, windowS: 15 * 60, prefix: 'post-create-session'}), createSessionController);
         router.get('/nonce', useRateLimit({limit: 5, windowS: 15 * 60, prefix: 'get-nonce'}), nonceController);
