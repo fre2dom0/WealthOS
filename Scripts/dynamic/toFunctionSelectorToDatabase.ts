@@ -57,6 +57,7 @@ const main = async () => {
             }
             let b = 0;
             for (const i of artifact.abi) {
+                // Only functions that effects state of contract.
                 if (i.stateMutability != 'payable' && i.stateMutability != 'nonpayable') continue;
                 if (!i.name) continue;
 
@@ -69,17 +70,17 @@ const main = async () => {
                 });
 
                 await db.none(
-                    'INSERT INTO static.function_selectors (contract_address, function_selector) VALUES ($1, $2)',
-                    [contract_address, selector]
+                    'INSERT INTO static.function_selectors (contract_address, function_selector, function) VALUES ($1, $2, $3)',
+                    [contract_address, selector, i.name]
                 );
-                console.log('Added : ' + contract_address, selector);
+                console.log('Added : ' + contract_address, selector, i.name, i.stateMutability);
                 b++;
             }
             
-            console.log(b);
+            console.log(`${b} functions added.`);
 
         } else {
-            // Handle direct function signature mode
+            // Handle function signature mode
             const functions = arg.split('-')
             functions.forEach((fn) => {
                 console.log(toFunctionSelector(fn.trim()))

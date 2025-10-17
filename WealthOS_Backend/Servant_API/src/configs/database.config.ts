@@ -1,8 +1,8 @@
 import ApiError from "../errors/ApiError.error.js";
+import API_CONFIG from "./api.config.js";
 import { devLog, infoLog } from "../utils/consoleLoggers.util.js";
 import { requireEnv } from "../utils/requireEnv.util.js";
-import API_CONFIG from "./api.config.js";
-import type { DatabaseConfig } from "../../types/database.config.type.js";
+import type { DatabaseConfig } from "../../types/database.type.js";
 
 const local_host = 'localhost'
 
@@ -19,7 +19,8 @@ const getEnvironmentVariables = (): DatabaseConfig => {
         if (isNaN(port)) throw new ApiError(`Invalid DATABASE_PORT: ${port}`)
         devLog(`\t⚓ PORT: ${port}`);
 
-        const database: string = requireEnv('DATABASE');
+        let database: string = requireEnv('DATABASE');
+        if (API_CONFIG.is_test) database += '_Test'; // Use test database if test
         devLog(`\t🗃️ DATABASE: ${database}`);
 
         const user: string = requireEnv('DATABASE_USER');

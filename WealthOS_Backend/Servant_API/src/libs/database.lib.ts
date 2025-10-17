@@ -59,22 +59,43 @@ export class Database {
 
     // Execute a query that returns multiple rows
     public async query<T = any>(sql: string, params?: any[]): Promise<T[]> {
-        return this.db.many(sql, params);
+        try {
+            return await this.db.many(sql, params);
+        } catch (err) {
+            errorLog(`Query failed: ${sql} - Error: ${err}`);
+            return [];
+        }
     }
 
     // Execute a query that returns a single row
-    public async one<T = any>(sql: string, params?: any[]): Promise<T> {
-        return this.db.one(sql, params);
+    public async one<T = any>(sql: string, params?: any[]): Promise<null> {
+         try {
+            return await this.db.one(sql, params);
+        } catch (err) {
+            errorLog(`One query failed or returned no result: ${sql} - Error: ${err}`);
+            return null;
+        }
     }
 
     // Execute a query that returns nothing
-    public async none<T = any>(sql: string, params?: any[]){
-        this.db.none(sql, params);
+    public async none(sql: string, params?: any[]): Promise<void | boolean> {
+        try {
+            await this.db.none(sql, params);
+            return true;
+        } catch (err) {
+            errorLog(`None query failed: ${sql} - Error: ${err}`);
+            return false;
+        }
     }
 
     // Execute a transactional block
-    public async transaction<T>(callback: (t: ITask<{}>) => Promise<T>): Promise<T> {
-        return this.db.tx(callback);
+    public async transaction<T>(callback: (t: ITask<{}>) => Promise<T>): Promise<T | null> {
+        try {
+            return await this.db.tx(callback);
+        } catch (err) {
+            errorLog(`Transaction failed - Error: ${err}`);
+            return null;
+        }
     }
 
     // Close the database connection gracefully

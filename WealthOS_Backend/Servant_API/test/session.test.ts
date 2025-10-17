@@ -8,7 +8,6 @@ import { signMessage } from "viem/accounts";
 import { SESSION_SIGNATURE, WALLET } from './config/test.config.js';
 import TestAgent from 'supertest/lib/agent.js';
 import redisClient from '../src/configs/redis.config.js';
-import { after } from 'node:test';
 
 const prefix: string = '/session';
 
