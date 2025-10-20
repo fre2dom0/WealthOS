@@ -69,11 +69,12 @@ const main = async () => {
                     stateMutability: i.stateMutability as AbiStateMutability,
                 });
 
-                await db.none(
-                    'INSERT INTO static.function_selectors (contract_address, function_selector, function) VALUES ($1, $2, $3)',
-                    [contract_address, selector, i.name]
-                );
-                console.log('Added : ' + contract_address, selector, i.name, i.stateMutability);
+                // await db.none(
+                //     'INSERT INTO static.function_selectors (contract_address, function_selector, function) VALUES ($1, $2, $3)',
+                //     [contract_address, selector, i.name]
+                // );
+                
+                console.log('Added : ' + contract_address, selector, i.name);
                 b++;
             }
             

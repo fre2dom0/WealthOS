@@ -1,9 +1,8 @@
-import type { Request } from "express"
 import { devLog } from "../utils/consoleLoggers.util.js";
 import { createRandomString } from "../utils/createRandom.util.js";
-import ApiError from "../errors/ApiError.error.js";
 import { verifyMessageSignature } from "../libs/verifyMessageSignature.lib.js";
 import type { SessionData } from "express-session";
+import ApiError from "../errors/ApiError.error.js";
 
 /**
  * Creates a user session by storing the wallet address and initializing session data.

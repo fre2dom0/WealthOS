@@ -12,11 +12,11 @@ export class Database {
         const initOptions: IInitOptions = {
             // Triggered when a new database connection is established
             connect(e) {
-                devLog('A connection occurred to database.', 'INFO');
+                // devLog('A connection occurred to database.', 'INFO');
             },
             // Triggered when a connection is disconnected
             disconnect(e) {
-                devLog(`A disconnection occurred from database.`, 'INFO');
+                // devLog(`A disconnection occurred from database.`, 'INFO');
             },
             // Logs all executed queries
             query(e) {
@@ -63,28 +63,28 @@ export class Database {
             return await this.db.many(sql, params);
         } catch (err) {
             errorLog(`Query failed: ${sql} - Error: ${err}`);
-            return [];
+            throw err;
         }
     }
 
     // Execute a query that returns a single row
     public async one<T = any>(sql: string, params?: any[]): Promise<null> {
-         try {
+        try {
             return await this.db.one(sql, params);
         } catch (err) {
             errorLog(`One query failed or returned no result: ${sql} - Error: ${err}`);
-            return null;
+            throw err;
         }
     }
 
     // Execute a query that returns nothing
-    public async none(sql: string, params?: any[]): Promise<void | boolean> {
+    public async none(sql: string, params?: any[]): Promise<boolean> {
         try {
             await this.db.none(sql, params);
             return true;
         } catch (err) {
             errorLog(`None query failed: ${sql} - Error: ${err}`);
-            return false;
+            throw err;
         }
     }
 
@@ -94,7 +94,7 @@ export class Database {
             return await this.db.tx(callback);
         } catch (err) {
             errorLog(`Transaction failed - Error: ${err}`);
-            return null;
+            throw err;
         }
     }
 

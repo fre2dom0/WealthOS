@@ -3,6 +3,7 @@ import './libs/loadEnv.lib.js';
 import './configs/api.config.js';
 import './configs/chain.config.js';
 import './configs/database.config.js';
+import model from './models/contracts.model.js'
 
 import API_CONFIG from "./configs/api.config.js";
 
@@ -25,7 +26,9 @@ export const db = Database.getInstance(connectionString);
 // Start watching events
 watchServantEvents();
 
+
 // Start app
-const app = createApp();
+const app = createApp({enableSession: false, enableRateLimiter: false});
 const PORT = API_CONFIG.port;
+
 export default {app, PORT};

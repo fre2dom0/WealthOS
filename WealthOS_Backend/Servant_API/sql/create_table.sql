@@ -26,7 +26,7 @@ COMMENT ON COLUMN static.function_selectors.description IS 'Max 250 characters d
 
 CREATE TABLE public.user_function_selector_approvals (
     user_address VARCHAR(42) NOT NULL,
-    function_selector VARCHAR(10) NOT NULL REFERENCES static.function_selectors(function_selector),
+    function_selector VARCHAR(10) NOT NULL REFERENCES static.function_selectors(function_selector) ON DELETE CASCADE,
     UNIQUE (user_address, function_selector)
 );
 

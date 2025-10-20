@@ -1,3 +1,4 @@
 export type ServantAppOptions = {
-    enableRateLimiter?: boolean
+    enableRateLimiter?: boolean;
+    enableSession?: boolean;
 }

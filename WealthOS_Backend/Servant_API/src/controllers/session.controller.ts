@@ -2,7 +2,6 @@ import type { Request, Response, NextFunction } from "express"
 import type { ApiResponse } from "../../types/response.type.js";
 
 import { validateData } from "../utils/validators.util.js";
-import { verifyMessageSignature } from "../libs/verifyMessageSignature.lib.js";
 
 import ApiError from "../errors/ApiError.error.js";
 import { checkSessionService, createSessionService, nonceService } from "../services/session.service.js";

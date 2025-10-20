@@ -9,6 +9,9 @@ import SESSION_CONFIG from '../configs/session.config.js';
 import { errorHandler } from '../middlewares/errorHandler.middleware.js';
 import createSessionRouter from '../routers/session.router.js';
 import { mainRateLimit } from './createRateLimiter.lib.js';
+import createContractsRouter from '../routers/db/contracts.router.js';
+import createFunctionSelectorsRouter from '../routers/db/functionSelectors.router.js';
+import createUserFunctionSelectorApprovalsRouter from '../routers/db/userFunctionSelectorApprovals.router.js';
 
 /**
  * Creates and configures an Express application instance with middleware, routes, and error handling.
@@ -24,7 +27,7 @@ import { mainRateLimit } from './createRateLimiter.lib.js';
  * @returns {Express} A fully configured Express application instance.
  * 
  * @example
- * // Production usage (default)
+ * // Production usage (default)D
  * const app = createExpressApplication();
  * 
  * @example
@@ -35,13 +38,16 @@ import { mainRateLimit } from './createRateLimiter.lib.js';
  * // Test usage (rate limiter explicitly enabled for middleware tests)
  * const app = createExpressApplication({ enableRateLimiter: true });
  */
-const createApp = (options: ServantAppOptions = {enableRateLimiter: true}): Express => {
+const createApp = (options: ServantAppOptions = {}): Express => {
+    options['enableSession'] = options.enableSession ?? true;
+    options['enableRateLimiter'] = options.enableRateLimiter ?? true;
+
     const app: Express = express();
-    
     // Middlewares
     app.use(express.json());
     app.use(express.urlencoded({ extended: true }));
     app.use(session(SESSION_CONFIG))
+    
     app.use(mainRateLimit); // Spam protection
     
     app.get('/', (req: Request, res: Response) => {
@@ -49,6 +55,9 @@ const createApp = (options: ServantAppOptions = {enableRateLimiter: true}): Expr
     })
      
     app.use('/session', createSessionRouter(options));
+    app.use('/db/contracts', createContractsRouter(options));
+    app.use('/db/function_selectors', createFunctionSelectorsRouter(options));
+    app.use('/db/user_function_selector_approvals', createUserFunctionSelectorApprovalsRouter(options));
     
     // Middleware
     app.use(errorHandler);

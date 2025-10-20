@@ -1,29 +1,35 @@
+import type { ContractData } from "../../types/db/contracts.type.js";
 import { db } from "../app.js";
+import ApiError from "../errors/ApiError.error.js";
 import { errorLog } from "../utils/consoleLoggers.util.js";
 
 export default {
-    getAll: async () => {
+    getAll: async (): Promise<ContractData[]> => {
         try {
-            return await db.query('SELECT * FROM static.contracts');
+            return await db.query('SELECT * FROM static.contracts') as ContractData[];
         } catch (err: unknown) {
-            errorLog('[ERROR-[STATIC.CONTRACTS]-An error occurred while getting contracts')
-            throw err;
+            throw new ApiError(`An error occurred while fetching contracts from database: ${err instanceof Error ? err.message : String(err)}`);
         }
     },
-    addContract: async () => {
+    insertContracts: async (data: ContractData[]): Promise<boolean> => {
         try {
-            return await db.none('INSERT INTO static.contracts (address, name, description) VALUES ($1, $2, $3);', []);
+            const values: string = data.map((_, i) => `($${i * 3 + 1}, $${i * 3 + 2}, $${i * 3 + 3})`).join(', '); // Create values
+            const params = data.flatMap(d => [d.address, d.name, d.description]); // Order the parameters
+            const query = `INSERT INTO static.contracts (address, name, description) VALUES ${values}`
+
+            return await db.none(query, params);
         } catch (err: unknown) {
-            errorLog('[ERROR-[STATIC.CONTRACTS]-An error occurred while adding contract')
-            throw err;
+            throw new ApiError(`An error occurred while inserting contracts to database: ${err instanceof Error ? err.message : String(err)}`, 'DATABASE_ERROR');
         }
     },
-    deleteContract: async () => {
+    deleteContracts: async (contractAddresses: `0x${string}`[]): Promise<ContractData[]> => {
         try {
-            return await db.none('DELETE FROM static.contracts WHERE address = $1;');
+            const values = contractAddresses.map((_, i) => `$${i + 1}`).join(', '); // Create values
+            const query = `DELETE FROM static.contracts WHERE address IN (${values}) RETURNING *;`;
+
+            return await db.query(query, contractAddresses) as ContractData[];
         } catch (err: unknown) {
-            errorLog('[ERROR-[STATIC.CONTRACTS]-An error occurred while deleting contract')
-            throw err;
+            throw new ApiError(`An error occurred while deleting contracts from database: ${err instanceof Error ? err.message : String(err)}`, 'DATABASE_ERROR');
         }
     }
 }

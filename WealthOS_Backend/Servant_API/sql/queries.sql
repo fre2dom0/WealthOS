@@ -8,9 +8,9 @@ DELETE FROM static.contracts WHERE address = $1;
 -----------------------------------------------
 
 -- GET FUNCTION SELECTORS
-SELECT * FROM static.function_selectors;
+SELECT * FROM static.function_selectors ORDER BY contract_address, function;
 -- GET FUNCTION SELECTORS ACCORDING TO CONTRACT ADDRESSES
-SELECT * FROM static.function_selectors WHERE contract_address = $1;
+SELECT * FROM static.function_selectors WHERE contract_address = $1 ORDER BY function;
 -- ADD NEW FUNCTION SELECTOR
 INSERT INTO static.function_selectors (contract_address, function_selector, function, description)  VALUES ($1, $2, $3, $4);
 -- REMOVE FUNCTION SELECTOR
