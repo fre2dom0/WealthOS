@@ -8,8 +8,8 @@ import servant_abi from '../src/configs/jsons/servant_artifact.json' with {type:
 import pgPromise from "pg-promise";
 
 import { randomBytes } from 'crypto';
-import { EventData } from '../types/database.type';
-import { ApprovedEvent, RevokedEvent } from '../types/blockchain.type';
+import { EventData } from '../types/db/events.type';
+import { ApprovedEvent } from '../types/blockchain.type';
 
 const generateHex66 = (): `0x${string}` => '0x' + randomBytes(32).toString('hex') as `0x${string}`;
 
