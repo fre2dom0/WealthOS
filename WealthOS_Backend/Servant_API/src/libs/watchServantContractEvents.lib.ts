@@ -1,4 +1,6 @@
 import type { EventName, EventArgsMap, ApprovedEvent, RevokedEvent } from '../../types/blockchain.type.js';
+import '../configs/chain.config.js';
+
 import { EVENT_TO_EVENT_TABLE, type EventData, type Tables } from '../../types/db/events.type.js';
 
 import { publicClient } from './blockchain.lib.js';

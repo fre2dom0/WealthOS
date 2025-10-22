@@ -1,4 +1,6 @@
 import type { IDatabase, IMain, IInitOptions, ITask } from 'pg-promise';
+import '../configs/database.config.js';
+
 import pgPromise from 'pg-promise';
 import { devLog, errorLog, infoLog } from '../utils/consoleLoggers.util.js';
 

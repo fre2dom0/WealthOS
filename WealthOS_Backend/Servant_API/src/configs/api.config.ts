@@ -1,5 +1,7 @@
 
 import type { ApiConfig, ChainEnv, DeployType, NodeEnv } from "../../types/api.config.type.js";
+import '../configs/api.config.js';
+
 import ApiError from "../errors/ApiError.error.js";
 import { devLog, infoLog } from "../utils/consoleLoggers.util.js";
 import { requireEnv } from "../utils/requireEnv.util.js";
