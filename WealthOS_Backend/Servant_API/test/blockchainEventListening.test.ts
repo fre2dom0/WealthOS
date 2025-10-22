@@ -1,15 +1,18 @@
-import '../src/libs/loadEnv.lib';
-import DATABASE_CONFIG, { connectionString } from '../src/configs/database.config';
-import { describe, beforeAll, it, expect } from 'vitest';
-import { processServantEvents } from '../src/libs/watchServantContractEvents.lib'
-import { decodeEventLog, Log } from 'viem';
-import servant_abi from '../src/configs/jsons/servant_artifact.json' with {type: 'json'};
+import '../src/libs/loadEnv.lib.js';
+
+
+import { decodeEventLog, type Log } from "viem";
+import type { EventData } from "../types/db/events.type.js";
+import servant_abi  from '../src/configs/jsons/servant_artifact.json';
+
+import { describe, it, beforeAll, expect } from 'vitest';
+import { processServantEvents } from '../src/libs/watchServantContractEvents.lib.js';
 
 import pgPromise from "pg-promise";
+import { randomBytes } from "crypto";
+import { ApprovedEvent } from "../types/blockchain.type.js";
+import { connectionString, DATABASE_CONFIG } from '../src/configs/database.config.js';
 
-import { randomBytes } from 'crypto';
-import { EventData } from '../types/db/events.type';
-import { ApprovedEvent } from '../types/blockchain.type';
 
 const generateHex66 = (): `0x${string}` => '0x' + randomBytes(32).toString('hex') as `0x${string}`;
 
@@ -200,7 +203,7 @@ describe('Event Listening Test', () => {
         });
 
         const args = decodedEventLog.args as unknown as ApprovedEvent;
-        const data: {user_address: `0x${string}`, function_selector: string} = await db.one(`SELECT * FROM public.user_function_selector_approvals WHERE function_selector = $1 AND user_address = $2`, [args.selector[0], args.user]);
+        const data: { user_address: `0x${string}`, function_selector: string } = await db.one(`SELECT * FROM public.user_function_selector_approvals WHERE function_selector = $1 AND user_address = $2`, [args.selector[0], args.user]);
 
         expect(data.user_address).to.be.equal(args.user);
         expect(data.function_selector).to.be.equal(args.selector[0]);
@@ -215,7 +218,7 @@ describe('Event Listening Test', () => {
         });
 
         let args = approvedDecodedEventLog.args as unknown as ApprovedEvent;
-        let data: {user_address: `0x${string}`, function_selector: string} = await db.one(`SELECT * FROM public.user_function_selector_approvals WHERE function_selector = $1 AND user_address = $2`, [args.selector[0], args.user]);
+        let data: { user_address: `0x${string}`, function_selector: string } = await db.one(`SELECT * FROM public.user_function_selector_approvals WHERE function_selector = $1 AND user_address = $2`, [args.selector[0], args.user]);
         expect(data.user_address).to.be.equal(args.user);
         expect(data.function_selector).to.be.equal(args.selector[0]);
 

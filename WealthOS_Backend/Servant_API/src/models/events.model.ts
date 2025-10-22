@@ -1,9 +1,12 @@
 import type { EventData, Tables } from "../../types/db/events.type.js";
 import type { ApprovedEvent, RevokedEvent } from "../../types/blockchain.type.js";
 import { errorLog } from "../utils/consoleLoggers.util.js";
-import { db } from "../app.js";
+import { Database } from "../libs/database.lib.js";
+import { connectionString } from "../configs/database.config.js";
 
-export default {
+const db = Database.getInstance(connectionString);
+
+export const EVENT_QUERIES = {
     insertEvent: async (data: EventData, table: Tables, is_test: boolean) => {
         try {
 

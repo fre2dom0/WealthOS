@@ -1,17 +1,19 @@
-import type { EventName, EventArgsMap, ApprovedEvent, RevokedEvent } from '../../types/blockchain.type.js';
 import '../configs/chain.config.js';
-
+import type { EventName, ApprovedEvent, RevokedEvent } from '../../types/blockchain.type.js';
 import { EVENT_TO_EVENT_TABLE, type EventData, type Tables } from '../../types/db/events.type.js';
+import { decodeEventLog, type Log } from 'viem';
 
 import { publicClient } from './blockchain.lib.js';
-import { decodeEventLog, type Log } from 'viem';
-import { devLog, errorLog } from '../utils/consoleLoggers.util.js';
-import databaseModel from '../models/events.model.js';
-import { getBlockTimestamp } from '../utils/blockchain.util.js';
-import ADDRESS_CONFIG from '../configs/chain.config.js';
+
+import { API_CONFIG } from '../configs/api.config.js';
+import { ADDRESS_CONFIG } from '../configs/chain.config.js';
 import servant_abi from '../configs/jsons/servant_artifact.json' with {type: 'json'};
-import ApiError from '../errors/ApiError.error.js';
-import API_CONFIG from '../configs/api.config.js';
+
+import { EVENT_QUERIES } from '../models/events.model.js';
+
+import { devLog, errorLog } from '../utils/consoleLoggers.util.js';
+import { getBlockTimestamp } from '../utils/blockchain.util.js';
+import { ApiError } from '../errors/ApiError.error.js';
 
 
 
@@ -50,16 +52,16 @@ export const processServantEvents = async (logs: Log<bigint, number, false, unde
                 args: decodedEventLog.args ?? {},
             };
 
-            await databaseModel.insertEvent(data, table, isTest);
+            await EVENT_QUERIES.insertEvent(data, table, isTest);
 
             switch (eventName) {
                 case "Approved":
                     const approved_args = decodedEventLog.args as unknown as ApprovedEvent;
-                    await databaseModel.insertApproval(approved_args, isTest);
+                    await EVENT_QUERIES.insertApproval(approved_args, isTest);
                     break;
                 case "Revoked":
                     const revoked_args = decodedEventLog.args as unknown as RevokedEvent;
-                    await databaseModel.deleteApproval(revoked_args, isTest);
+                    await EVENT_QUERIES.deleteApproval(revoked_args, isTest);
                     break;
                 default:
                     break;

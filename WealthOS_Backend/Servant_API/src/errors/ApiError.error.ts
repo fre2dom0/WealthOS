@@ -7,7 +7,7 @@ import { errorLog } from "../utils/consoleLoggers.util.js";
  * Ensures consistent error structure with a machine-readable code,
  * an HTTP status code, and an optional custom message.
  */
-class ApiError extends Error {
+export class ApiError extends Error {
     statusCode: number;
     code: ApiResponseCode;
 
@@ -37,8 +37,6 @@ class ApiError extends Error {
         process.exit(1);
     }
 }
-
-export default ApiError;
 
 /**
     1xx Informational 	 

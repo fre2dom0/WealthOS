@@ -1,12 +1,12 @@
 import './libs/loadEnv.lib.js';
 
-import API_CONFIG from "./configs/api.config.js";
+import { API_CONFIG } from "./configs/api.config.js";
 import { connectionString } from './configs/database.config.js';
 
 import { Database } from './libs/database.lib.js';
 import { watchServantEvents } from './libs/watchServantContractEvents.lib.js';
 
-import createApp from "./libs/createApp.lib.js";
+import { createApp } from "./libs/createApp.lib.js";
 
 
 // TODO : 
@@ -16,7 +16,7 @@ import createApp from "./libs/createApp.lib.js";
  */
 
 // Start database
-export const db = Database.getInstance(connectionString);
+Database.getInstance(connectionString);
 
 // Start watching events
 watchServantEvents();
@@ -25,4 +25,4 @@ watchServantEvents();
 const app = createApp();
 const PORT = API_CONFIG.port;
 
-export default {app, PORT};
+export default { app, PORT };

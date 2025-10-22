@@ -1,10 +1,9 @@
 import { devLog, infoLog } from '../utils/consoleLoggers.util.js';
 import type { Options } from 'express-rate-limit';
 
-let count_of_rate_limiter: number = 0;
-
 // Create and use the rate limiter
 infoLog('Preparing base rate limiter configurations...', 'WAITING');
+
 export const RATE_LIMITER_CONFIG: Partial<Options> = {
 	// Rate limiter configuration
 	windowMs: 1 * 60 * 1000, // 1 minutes

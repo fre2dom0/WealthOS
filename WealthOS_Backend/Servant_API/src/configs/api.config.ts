@@ -2,7 +2,7 @@
 import type { ApiConfig, ChainEnv, DeployType, NodeEnv } from "../../types/api.config.type.js";
 import '../configs/api.config.js';
 
-import ApiError from "../errors/ApiError.error.js";
+import { ApiError } from "../errors/ApiError.error.js";
 import { devLog, infoLog } from "../utils/consoleLoggers.util.js";
 import { requireEnv } from "../utils/requireEnv.util.js";
 import chalk from "chalk";
@@ -85,7 +85,7 @@ const getEnvironmentVariables = (): { chain_env: ChainEnv, node_env: NodeEnv, de
 }
 const { chain_env, node_env, deploy_type, domain, port, allowed_origins } = getEnvironmentVariables();
 const is_test: boolean = Boolean(process.env.TEST);
-const API_CONFIG: ApiConfig = {
+export const API_CONFIG: ApiConfig = {
     is_test,
     chain_env,
     node_env,
@@ -94,5 +94,3 @@ const API_CONFIG: ApiConfig = {
     port,
     allowed_origins
 }
-
-export default API_CONFIG;

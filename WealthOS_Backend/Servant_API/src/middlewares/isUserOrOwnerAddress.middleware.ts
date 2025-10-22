@@ -1,7 +1,6 @@
 import type { Request, Response, NextFunction } from "express";
-import ADDRESS_CONFIG from "../configs/chain.config.js";
-import ApiError from "../errors/ApiError.error.js";
-import { devLog } from "../utils/consoleLoggers.util.js";
+import { ADDRESS_CONFIG } from "../configs/chain.config.js";
+import { ApiError } from "../errors/ApiError.error.js";
 
 export const isUserOrOwnerAddress = (req: Request, res: Response, next: NextFunction) => {
     try {

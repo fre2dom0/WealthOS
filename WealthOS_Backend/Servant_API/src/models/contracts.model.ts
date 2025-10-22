@@ -1,9 +1,11 @@
 import type { ContractData } from "../../types/db/contracts.type.js";
-import { db } from "../app.js";
-import ApiError from "../errors/ApiError.error.js";
-import { errorLog } from "../utils/consoleLoggers.util.js";
+import { connectionString } from "../configs/database.config.js";
+import { ApiError } from "../errors/ApiError.error.js";
+import { Database } from "../libs/database.lib.js";
 
-export default {
+const db = Database.getInstance(connectionString);
+
+export const CONTRACTS_QUERIES = {
     getAll: async (): Promise<ContractData[]> => {
         try {
             return await db.query('SELECT * FROM static.contracts') as ContractData[];

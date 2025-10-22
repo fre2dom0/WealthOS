@@ -1,13 +1,12 @@
 import type { ServantAppOptions } from "../../../types/servant-app.config.type.js";
 import { Router } from "express";
-import { deleteContractsController, getAllContractsController, insertContractsController } from "../../controllers/db/contracts.controller.js";
 import { useRateLimit } from "../../libs/createRateLimiter.lib.js";
 import { isOwnerAddress } from "../../middlewares/isOwnerAddress.middleware.js";
 import { getAllFunctionSelectorsController, getContractFunctionSelectorsController, insertFunctionSelectorsController, deleteFunctionSelectorsController, deleteContractFunctionSelectorsController } from "../../controllers/db/functionSelectors.controller.js";
 import { nullFilterer } from "../../utils/filterers.util.js";
 
 
-const createFunctionSelectorsRouter = (options?: ServantAppOptions) => {
+export const createFunctionSelectorsRouter = (options?: ServantAppOptions) => {
     const router = Router();
 
     const isSessionEnable = options?.enableSession;
@@ -59,6 +58,3 @@ const createFunctionSelectorsRouter = (options?: ServantAppOptions) => {
 
     return router;
 };
-
-
-export default createFunctionSelectorsRouter;

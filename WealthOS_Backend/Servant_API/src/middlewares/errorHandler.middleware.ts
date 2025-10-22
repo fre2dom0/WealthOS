@@ -1,6 +1,6 @@
 import type { Request, Response, NextFunction } from "express";
 import type { ApiResponseCode } from "../../types/response.type.js";
-import ApiError from "../errors/ApiError.error.js";
+import { ApiError } from "../errors/ApiError.error.js";
 import { errorLog } from "../utils/consoleLoggers.util.js";
 
 /**

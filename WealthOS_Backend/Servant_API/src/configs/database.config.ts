@@ -1,5 +1,5 @@
-import ApiError from "../errors/ApiError.error.js";
-import API_CONFIG from "./api.config.js";
+import { ApiError } from "../errors/ApiError.error.js";
+import { API_CONFIG } from "./api.config.js";
 import { devLog, infoLog } from "../utils/consoleLoggers.util.js";
 import { requireEnv } from "../utils/requireEnv.util.js";
 import type { DatabaseConfig } from "../../types/db/database.type.js";
@@ -46,12 +46,10 @@ const getEnvironmentVariables = (): DatabaseConfig => {
 const { host, port, database, user, password }: DatabaseConfig = getEnvironmentVariables();
 export const connectionString = `postgresql://${encodeURIComponent(user)}:${encodeURIComponent(password)}@${host}:${port}/${database}`;
 
-const DATABASE_CONFIG: DatabaseConfig = {
+export const DATABASE_CONFIG: DatabaseConfig = {
     host,
     port,
     database,
     user,
     password
 }
-
-export default DATABASE_CONFIG;

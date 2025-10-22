@@ -41,7 +41,7 @@
 	"include": [
 		"src/**/*",
 		"types/express-session.d.ts"
-	],
+, "test/blockchainEventListening.test.ts", "test/spamProtection.test.ts"	],
 	"exclude": [
 		"test",
 		"node_modules"

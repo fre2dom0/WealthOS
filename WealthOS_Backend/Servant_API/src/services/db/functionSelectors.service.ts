@@ -1,11 +1,11 @@
 import type { FunctionSelectorData } from '../../../types/db/function-selectors.type.js';
-import ApiError from '../../errors/ApiError.error.js';
-import function_selector_quaries from '../../models/functionSelectors.model.js';
+import { ApiError } from '../../errors/ApiError.error.js';
+import { FUNCTION_SELECTOR_QUERIES } from '../../models/functionSelectors.model.js';
 import { validateData, validateWalletAddress } from '../../utils/validators.util.js';
 
 export const getAllFunctionSelectorsService = async (): Promise<FunctionSelectorData[]> => {
     try {
-        return await function_selector_quaries.getAll();
+        return await FUNCTION_SELECTOR_QUERIES.getAll();
     } catch (err: unknown) {
         throw err;
     }
@@ -14,7 +14,7 @@ export const getAllFunctionSelectorsService = async (): Promise<FunctionSelector
 export const getContractFunctionSelectorsService = async (contract_address: `0x${string}`): Promise<FunctionSelectorData[]> => {
     try {
         if (!validateWalletAddress(contract_address)) throw new ApiError('The contract address is not valid.', 'BAD_REQUEST');
-        return await function_selector_quaries.getContractFunctionSelectors(contract_address);
+        return await FUNCTION_SELECTOR_QUERIES.getContractFunctionSelectors(contract_address);
     } catch (err: unknown) {
         throw err;
     }
@@ -39,7 +39,7 @@ export const insertFunctionSelectorsService = async (data: FunctionSelectorData[
             });
         }
 
-        return await function_selector_quaries.insertFunctionSelectors(validData);
+        return await FUNCTION_SELECTOR_QUERIES.insertFunctionSelectors(validData);
     } catch (err: unknown) {
         throw err;
     }
@@ -54,7 +54,7 @@ export const deleteFunctionSelectorsService = async (function_selectors: string[
             if (f.length != 10) throw new ApiError(`The function selector is not valid: ${f}`, 'BAD_REQUEST');
         }
 
-        return await function_selector_quaries.deleteFunctionSelectors(function_selectors)
+        return await FUNCTION_SELECTOR_QUERIES.deleteFunctionSelectors(function_selectors)
     } catch (err: unknown) {
         throw err;
     }
@@ -64,12 +64,12 @@ export const deleteContractFunctionSelectorsService = async (contract_addresses:
     try {
         if (contract_addresses.length == 0) throw new ApiError('No contract address provided', 'BAD_REQUEST');
         if (contract_addresses.length > 10) throw new ApiError("You can delete a maximum of 10 contract function selectors at once.", "BAD_REQUEST");
-        
+
         for (const c of contract_addresses) {
-            if(!validateWalletAddress(c)) throw new ApiError(`The contract address is not valid: ${c}`, 'BAD_REQUEST');
+            if (!validateWalletAddress(c)) throw new ApiError(`The contract address is not valid: ${c}`, 'BAD_REQUEST');
         }
 
-        return await function_selector_quaries.deleteContractFunctionSelectors(contract_addresses)
+        return await FUNCTION_SELECTOR_QUERIES.deleteContractFunctionSelectors(contract_addresses)
     } catch (err: unknown) {
         throw err;
     }

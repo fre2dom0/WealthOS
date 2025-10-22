@@ -5,7 +5,7 @@ import { useRateLimit } from "../../libs/createRateLimiter.lib.js";
 import { isOwnerAddress } from "../../middlewares/isOwnerAddress.middleware.js";
 import { nullFilterer } from "../../utils/filterers.util.js";
 
-const createContractsRouter = (options?: ServantAppOptions) => {
+export const createContractsRouter = (options?: ServantAppOptions) => {
     const router = Router();
 
     const isSessionEnable = !!options?.enableSession;
@@ -40,5 +40,3 @@ const createContractsRouter = (options?: ServantAppOptions) => {
 
     return router;
 }
-
-export default createContractsRouter;

@@ -3,11 +3,11 @@ import { devLog } from '../utils/consoleLoggers.util.js';
 
 import rateLimit, { ipKeyGenerator, type Options, type RateLimitRequestHandler } from 'express-rate-limit';
 
-import redisClient from '../configs/redis.config.js';
-import API_CONFIG from "../configs/api.config.js";
+import { redisClient } from '../configs/redis.config.js';
+import { API_CONFIG } from "../configs/api.config.js";
 import { RATE_LIMITER_CONFIG } from "../configs/rate-limiter.config.js";
 import RedisStore from 'rate-limit-redis';
-import ApiError from '../errors/ApiError.error.js';
+import { ApiError } from '../errors/ApiError.error.js';
 
 let count_of_rate_limiter: number = 0;
 
@@ -26,9 +26,9 @@ export type UseRateLimitParameters = {
  */
 export const useRateLimit = (args: UseRateLimitParameters = {}): RateLimitRequestHandler => {
 	const prefix = API_CONFIG.is_test
-	? `test-wealthos-rate-limiter-${args.prefix ?? `${count_of_rate_limiter}`}:`
-	: `wealthos-rate-limiter-${args.prefix ?? `${count_of_rate_limiter}`}:`;
-	
+		? `test-wealthos-rate-limiter-${args.prefix ?? `${count_of_rate_limiter}`}:`
+		: `wealthos-rate-limiter-${args.prefix ?? `${count_of_rate_limiter}`}:`;
+
 	if (!args.prefix) count_of_rate_limiter++;
 
 	// devLog(`Preparing rate-limiter configuration ${prefix} :`, 'WAITING')

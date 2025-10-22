@@ -1,18 +1,18 @@
 import type { ApiResponse } from '../types/response.type.js';
 
 import { describe, beforeEach, it, expect, vi } from 'vitest';
-import request from 'supertest';
-import createApp from '../src/libs/createApp.lib.js'
 import { signMessage } from "viem/accounts";
+import request from 'supertest';
+import TestAgent from 'supertest/lib/agent.js';
 
 import { SESSION_SIGNATURE, WALLET } from './config/test.config.js';
-import TestAgent from 'supertest/lib/agent.js';
-import redisClient from '../src/configs/redis.config.js';
+import { createApp } from '../src/libs/createApp.lib.js'
+import { redisClient } from '../src/configs/redis.config.js';
 
 const prefix: string = '/session';
 
 describe('/session', () => {
-	const agent = request.agent(createApp({ enableRateLimiter: false }));
+	const agent = request.agent(createApp({ enableRateLimiter: false, enableSession: true }));
 
 	describe(`GET - ${prefix}/nonce`, () => {
 		it('Should return nonce', async () => {
@@ -141,9 +141,6 @@ describe('/session', () => {
 		})
 
 	})
-
-
-
 })
 
 describe('Rate Limiter', () => {

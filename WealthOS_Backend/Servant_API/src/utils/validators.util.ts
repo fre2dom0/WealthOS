@@ -1,12 +1,12 @@
 import { isAddress } from "viem";
-import ApiError from "../errors/ApiError.error.js";
+import { ApiError } from "../errors/ApiError.error.js";
 
 /**
  * Checks empty values of incoming object
  */
 export const validateData = (data: object, throwError: boolean): string[] => {
     const missing: string[] = [];
-    
+
     Object.entries(data).forEach(([key, value]) => {
         if (value == null || value == undefined || value.trim() == '') {
             missing.push(key);

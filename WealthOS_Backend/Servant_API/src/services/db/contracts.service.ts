@@ -1,12 +1,12 @@
 import type { ContractData } from '../../../types/db/contracts.type.js';
-import ApiError from '../../errors/ApiError.error.js';
-import contracts_queries from '../../models/contracts.model.js';
+import { ApiError } from '../../errors/ApiError.error.js';
+import { CONTRACTS_QUERIES } from '../../models/contracts.model.js';
 import { validateData, validateWalletAddress } from '../../utils/validators.util.js';
 
 export const getAllContractsService = async (): Promise<ContractData[]> => {
     try {
 
-        return await contracts_queries.getAll();
+        return await CONTRACTS_QUERIES.getAll();
     } catch (err: unknown) {
         throw err;
     }
@@ -30,7 +30,7 @@ export const insertContractsService = async (data: ContractData[]) => {
             });
         }
 
-        await contracts_queries.insertContracts(validData);
+        await CONTRACTS_QUERIES.insertContracts(validData);
     } catch (err: unknown) {
         throw err;
     }
@@ -44,7 +44,7 @@ export const deleteContractsService = async (contract_addresses: `0x${string}`[]
         for (const c of contract_addresses) {
             if (!validateWalletAddress(c)) throw new ApiError(`The contract address is not valid: ${c}`, 'BAD_REQUEST');
         }
-        const deletedContracts = await contracts_queries.deleteContracts(contract_addresses);
+        const deletedContracts = await CONTRACTS_QUERIES.deleteContracts(contract_addresses);
         return deletedContracts
     } catch (err: unknown) {
         throw err;

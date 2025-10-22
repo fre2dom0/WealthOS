@@ -1,23 +1,23 @@
 import { type SessionOptions } from 'express-session';
-import API_CONFIG from './api.config.js';
-import { devLog, infoLog } from '../utils/consoleLoggers.util.js';
-import chalk from 'chalk';
+import { API_CONFIG } from './api.config.js';
+import { redisClient } from './redis.config.js';
 import { RedisStore } from 'connect-redis';
-import redisClient from './redis.config.js';
+import { devLog, infoLog } from '../utils/consoleLoggers.util.js';
 
+import chalk from 'chalk';
 
 infoLog('Preparing session configurations...', 'WAITING');
 
-// Initialize store.
 
 const prefix: string = API_CONFIG.is_test ? 'test-wealthos-session:' : 'wealthos-session';
 
+// Initialize store.
 const redisStore = new RedisStore({
     client: redisClient,
     prefix
 })
 
-const SESSION_CONFIG: SessionOptions = {
+export const SESSION_CONFIG: SessionOptions = {
     secret: process.env.SESSION_SECRET || 'supersecret',
     resave: true,
     saveUninitialized: true, // ! Does not work with rate limiter if it is false.
@@ -36,7 +36,4 @@ const SESSION_CONFIG: SessionOptions = {
 });
 
 infoLog('Session configuration is ready.', 'SUCCESS');
-
-export default SESSION_CONFIG;
-
 

@@ -1,17 +1,19 @@
+import '../libs/loadEnv.lib.js';
+
 import type { Request, Response } from 'express';
 import type { ServantAppOptions } from '../../types/servant-app.config.type.js'
 
 import express, { type Express } from 'express';
 import session from 'express-session';
 
-import SESSION_CONFIG from '../configs/session.config.js';
+import { SESSION_CONFIG } from '../configs/session.config.js';
 
 import { errorHandler } from '../middlewares/errorHandler.middleware.js';
-import createSessionRouter from '../routers/session.router.js';
 import { mainRateLimit } from './createRateLimiter.lib.js';
-import createContractsRouter from '../routers/db/contracts.router.js';
-import createFunctionSelectorsRouter from '../routers/db/functionSelectors.router.js';
-import createUserFunctionSelectorApprovalsRouter from '../routers/db/userFunctionSelectorApprovals.router.js';
+import { createSessionRouter } from '../routers/session.router.js';
+import { createContractsRouter } from '../routers/db/contracts.router.js';
+import { createFunctionSelectorsRouter } from '../routers/db/functionSelectors.router.js';
+import { createUserFunctionSelectorApprovalsRouter } from '../routers/db/userFunctionSelectorApprovals.router.js';
 
 /**
  * Creates and configures an Express application instance with middleware, routes, and error handling.
@@ -38,31 +40,29 @@ import createUserFunctionSelectorApprovalsRouter from '../routers/db/userFunctio
  * // Test usage (rate limiter explicitly enabled for middleware tests)
  * const app = createExpressApplication({ enableRateLimiter: true });
  */
-const createApp = (options: ServantAppOptions = {}): Express => {
-    options['enableSession'] = options.enableSession ?? true;
-    options['enableRateLimiter'] = options.enableRateLimiter ?? true;
+export const createApp = (options: ServantAppOptions = {}): Express => {
+    // options['enableSession'] = options.enableSession ?? true;
+    // options['enableRateLimiter'] = options.enableRateLimiter ?? true;
 
     const app: Express = express();
     // Middlewares
     app.use(express.json());
     app.use(express.urlencoded({ extended: true }));
     app.use(session(SESSION_CONFIG))
-    
+
     app.use(mainRateLimit); // Spam protection
-    
+
     app.get('/', (req: Request, res: Response) => {
         res.send(`Welcome to the WealthOS Servant Module API.`);
     })
-     
+
     app.use('/session', createSessionRouter(options));
     app.use('/db/contracts', createContractsRouter(options));
     app.use('/db/function_selectors', createFunctionSelectorsRouter(options));
     app.use('/db/user_function_selector_approvals', createUserFunctionSelectorApprovalsRouter(options));
-    
+
     // Middleware
     app.use(errorHandler);
 
     return app;
 }
-
-export default createApp;

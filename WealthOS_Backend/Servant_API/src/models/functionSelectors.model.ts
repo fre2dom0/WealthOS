@@ -1,9 +1,11 @@
 import type { FunctionSelectorData } from "../../types/db/function-selectors.type.js";
-import { db } from "../app.js";
-import ApiError from "../errors/ApiError.error.js";
-import { errorLog } from "../utils/consoleLoggers.util.js";
+import { connectionString } from "../configs/database.config.js";
+import { ApiError } from "../errors/ApiError.error.js";
+import { Database } from "../libs/database.lib.js";
 
-export default {
+const db = Database.getInstance(connectionString);
+
+export const FUNCTION_SELECTOR_QUERIES = {
     getAll: async (): Promise<FunctionSelectorData[]> => {
         try {
             return await db.query('SELECT * FROM static.function_selectors ORDER BY contract_address, function;') as FunctionSelectorData[];
@@ -20,7 +22,7 @@ export default {
     },
     insertFunctionSelectors: async (data: FunctionSelectorData[]): Promise<boolean> => {
         try {
-            const values: string = data.map((_, i) => `($${i * 4 + 1}, $${i * 4+ 2}, $${i * 4 + 3}, $${i * 4 + 4})`).join(', '); // Create values
+            const values: string = data.map((_, i) => `($${i * 4 + 1}, $${i * 4 + 2}, $${i * 4 + 3}, $${i * 4 + 4})`).join(', '); // Create values
             const params = data.flatMap(d => [d.contract_address, d.function_selector, d.function, d.description]); // Order the parameters
             const query = `INSERT INTO static.function_selectors (contract_address, function_selector, function, description) VALUES ${values}`
 

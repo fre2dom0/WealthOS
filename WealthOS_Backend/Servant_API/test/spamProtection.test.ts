@@ -1,6 +1,6 @@
 import { describe, beforeAll, it, expect } from 'vitest';
 import request from 'supertest';
-import createApp from '../src/libs/createApp.lib';
+import { createApp } from '../src/libs/createApp.lib';
 
 describe('Spam Protection', () => {
     const agent = request.agent(createApp({ enableRateLimiter: true }));
