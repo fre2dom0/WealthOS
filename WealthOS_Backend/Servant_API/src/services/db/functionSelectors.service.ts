@@ -29,7 +29,9 @@ export const insertFunctionSelectorsService = async (data: FunctionSelectorData[
 
         for (const d of data) {
             if (!validateWalletAddress(d.contract_address)) throw new ApiError(`The contract address is not valid: ${d.contract_address}`, 'BAD_REQUEST');
-            validateData({ function_selector: d.function_selector, function: d.function }, true);
+            if (d.function_selector.length != 10) throw new ApiError(`The function selector is not valid: ${d.function_selector}`, 'BAD_REQUEST');
+            validateData({ function: d.function }, true);
+            
 
             validData.push({
                 contract_address: d.contract_address,
