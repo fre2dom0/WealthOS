@@ -14,7 +14,6 @@ describe('Spam Protection', () => {
             response = await agent.get(`/`)
             status_code = response?.statusCode!;
 
-            console.log(status_code, i)
         }
         
         status_code = response?.statusCode!;
