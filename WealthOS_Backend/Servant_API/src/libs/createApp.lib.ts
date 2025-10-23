@@ -41,8 +41,8 @@ import { createUserFunctionSelectorApprovalsRouter } from '../routers/db/userFun
  * const app = createExpressApplication({ enableRateLimiter: true });
  */
 export const createApp = (options: ServantAppOptions = {}): Express => {
-    // options['enableSession'] = options.enableSession ?? true;
-    // options['enableRateLimiter'] = options.enableRateLimiter ?? true;
+    options['enableSession'] = options.enableSession ?? true;
+    options['enableRateLimiter'] = options.enableRateLimiter ?? true;
 
     const app: Express = express();
     // Middlewares
