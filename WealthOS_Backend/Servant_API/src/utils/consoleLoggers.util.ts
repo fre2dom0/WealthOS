@@ -1,5 +1,7 @@
 import { requireEnv } from "./requireEnv.util.js";
 const node_env = requireEnv('NODE_ENV')
+const is_test: boolean = Boolean(process.env.TEST);
+
 
 type TypeOfLog = 'INFO' | 'WARNING' | 'WAITING' | 'SUCCESS' | 'DENIED';
 
@@ -17,7 +19,7 @@ const emojiMap: Record<TypeOfLog, string> = {
  * @param message Logged message
  */
 export const devLog = (message: string, type?: TypeOfLog) => {
-    if (node_env != 'development') return;
+    if (node_env != 'development' || is_test) return;
 
     const emoji = type ? emojiMap[type] : '';
     console.log(`${emoji ? `${emoji} ` : ''}${message}`);
@@ -28,6 +30,8 @@ export const devLog = (message: string, type?: TypeOfLog) => {
  * @param message Logged message
  */
 export const infoLog = (message: string, type?: TypeOfLog) => {
+    if (is_test) return;
+
     const emoji = type ? emojiMap[type] : '';
     console.log(emoji ? `${emoji} ${message}` : message);
 }
@@ -37,5 +41,6 @@ export const infoLog = (message: string, type?: TypeOfLog) => {
  * @param message Logged message
  */
 export const errorLog = (message: string | unknown) => {
+    if (is_test) return;
     console.error('❌' + ' ' + message);
 }
