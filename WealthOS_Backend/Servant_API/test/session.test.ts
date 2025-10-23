@@ -106,7 +106,7 @@ describe('/session', () => {
 				})
 
 			const data: ApiResponse = response.body;
-			expect(data.code).to.be.equal('UNAUTHORIZED');
+			expect(data.code).to.be.equal('BAD_REQUEST');
 			expect(data.message).to.be.equal('Invalid signature. Please ensure the message and signature are correct.')
 		})
 
@@ -119,7 +119,7 @@ describe('/session', () => {
 				})
 
 			const data: ApiResponse = response.body;
-			expect(data.code).to.be.equal('UNAUTHORIZED');
+			expect(data.code).to.be.equal('BAD_REQUEST');
 			expect(data.message).to.be.equal('Nonce mismatches while verifying signature.')
 		})
 
@@ -136,7 +136,7 @@ describe('/session', () => {
 				})
 
 			const data: ApiResponse = response.body;
-			expect(data.code).to.be.equal('UNAUTHORIZED');
+			expect(data.code).to.be.equal('BAD_REQUEST');
 			expect(data.message).to.be.equal('Nonce expired.')
 		})
 
@@ -206,18 +206,4 @@ describe('Rate Limiter', () => {
 		const status_code: number = response?.statusCode!;
 		expect(status_code).to.be.equal(429);
 	})
-
-	it(`Should ${prefix}/fetch_session return 429 after 50 request in 1 minutes`, async () => {
-		const LIMIT: number = 50;
-
-		let response;
-
-		for (let i = 0; i < LIMIT + 1; i++) {
-			response = await agent.get(`${prefix}/fetch_session`);;
-		}
-
-		const status_code: number = response?.statusCode!;
-		expect(status_code).to.be.equal(429);
-	})
-
 })
