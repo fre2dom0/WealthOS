@@ -8,7 +8,7 @@ const db = Database.getInstance(connectionString);
 export const CONTRACTS_QUERIES = {
     getAll: async (): Promise<ContractData[]> => {
         try {
-            return await db.query('SELECT * FROM static.contracts') as ContractData[];
+            return await db.query('SELECT * FROM static.contracts ORDER BY name') as ContractData[];
         } catch (err: unknown) {
             throw new ApiError(`An error occurred while fetching contracts from database: ${err instanceof Error ? err.message : String(err)}`);
         }
