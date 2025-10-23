@@ -41,7 +41,7 @@ export const checkSessionController = (req: Request, res: Response, next: NextFu
 
 export const nonceController = (req: Request, res: Response, next: NextFunction) => {
     try {
-        if (req.session.address && !API_CONFIG.is_test) throw new ApiError('You already have a session', 'UNAUTHORIZED');
+        if (req.session.address && !API_CONFIG.is_test) throw new ApiError('You already have a session', 'BAD_REQUEST');
 
         const nonce = nonceService(req.session);
         const response: ApiResponse = {
@@ -60,6 +60,39 @@ export const getSessionController = (req: Request, res: Response) => {
     if (API_CONFIG.node_env == 'development') {
         res.status(200).json(req.session);
     } else {
-        res.status(403)
+        throw new ApiError('Not development environment', 'FORBIDDEN');
+    }
+}
+
+// No validation
+export const createSessionTestController = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        if (API_CONFIG.node_env != 'development') throw new ApiError('Not development environment', 'FORBIDDEN');
+
+        const { address } = req.body;
+        req.session.address = address;
+        const response: ApiResponse = {
+            message: 'Session successfully created!',
+            code: 'SUCCESS'
+        }
+        res.status(200).json(response);
+    } catch (err: unknown) {
+        next(err);
+    }
+}
+
+export const destroySessionTestController = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        if (API_CONFIG.node_env != 'development') throw new ApiError('Not development environment', 'FORBIDDEN');
+
+        delete req.session.address;
+
+        const response: ApiResponse = {
+            message: 'Session successfully destroyed!',
+            code: 'SUCCESS'
+        }
+        res.status(200).json(response);
+    } catch (err: unknown) {
+        next(err);
     }
 }

@@ -3,6 +3,7 @@ import { createRandomString } from "../utils/createRandom.util.js";
 import { verifyMessageSignature } from "../libs/verifyMessageSignature.lib.js";
 import type { SessionData } from "express-session";
 import { ApiError } from "../errors/ApiError.error.js";
+import { API_CONFIG } from "../configs/api.config.js";
 
 /**
  * Creates a user session by storing the wallet address and initializing session data.
@@ -13,13 +14,14 @@ import { ApiError } from "../errors/ApiError.error.js";
 export const createSessionService = async (session: Partial<SessionData>, address: `0x${string}`, signature: `0x${string}`, nonce: string) => {
     try {
         // Nonce check
-        if (session.nonce && session.nonce.value != nonce) throw new ApiError('Nonce mismatches while verifying signature.', 'UNAUTHORIZED');
-        else if (session.nonce && session.nonce.expiresAt < Date.now()) throw new ApiError('Nonce expired.', 'UNAUTHORIZED');
+        if (!session.nonce) throw new ApiError('No nonce found.', 'BAD_REQUEST');
+        if (session.nonce && session.nonce.value != nonce) throw new ApiError('Nonce mismatches while verifying signature.', 'BAD_REQUEST');
+        else if (session.nonce && session.nonce.expiresAt < Date.now()) throw new ApiError('Nonce expired.', 'BAD_REQUEST');
 
         // Sign and check message
         const message = `Please sign the message to create user session. Nonce : ${nonce}`
         const isVerified = await verifyMessageSignature({ address, message, signature }, nonce);
-        if (!isVerified) throw new ApiError('Invalid signature. Please ensure the message and signature are correct.', 'UNAUTHORIZED')
+        if (!isVerified) throw new ApiError('Invalid signature. Please ensure the message and signature are correct.', 'BAD_REQUEST')
 
         // Delete nonce and create session
         delete session.nonce;
