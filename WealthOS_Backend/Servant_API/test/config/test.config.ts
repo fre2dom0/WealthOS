@@ -1,13 +1,20 @@
 type Wallet = {
-    PUBLIC_KEY: string;
+    PUBLIC_KEY: `0x${string}`;
     PRIVATE_KEY: `0x${string}`;
+    OWNER_ADDRESS: `0x${string}`;
 }
 
 export const WALLET: Wallet = {
     PUBLIC_KEY: '0x870B2Df642c696B6308497b029D9f2202f6ae6Dc',
     PRIVATE_KEY: '0xb9857adb42226df697a06a17d9d71715a5e56a4476d3865b8b0a306e784e9380',
+    OWNER_ADDRESS: '0xb60706F3B1c3cA291f49BE4a840314a92eEbb12d'
 }
 
 export const SESSION_SIGNATURE = {
     message: 'Please sign the message to create user session. Nonce : '
+}
+
+export const RATE_LIMITS = {
+    LIMIT_FOR_GET: 50,
+    LIMIT_FOR_POST_AND_DELETE: 5
 }
