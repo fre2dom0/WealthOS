@@ -16,7 +16,6 @@ export const createContractsRouter = (options?: ServantAppOptions) => {
         ...nullFilterer(
             isRateLimiterEnable ? useRateLimit({ limit: 5, windowS: 60, prefix: 'get-all-contracts' }) : null,
         ),
-        // useRateLimit({ limit: 5, windowS: 60, prefix: 'get-all-contracts' }),
         getAllContractsController
     );
 
