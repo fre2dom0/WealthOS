@@ -14,6 +14,7 @@ import { createSessionRouter } from '../routers/session.router.js';
 import { createContractsRouter } from '../routers/db/contracts.router.js';
 import { createFunctionSelectorsRouter } from '../routers/db/functionSelectors.router.js';
 import { createUserFunctionSelectorApprovalsRouter } from '../routers/db/userFunctionSelectorApprovals.router.js';
+import { createExecutorRouter } from '../routers/executor.router.js';
 
 /**
  * Creates and configures an Express application instance with middleware, routes, and error handling.
@@ -57,6 +58,7 @@ export const createApp = (options: ServantAppOptions = {}): Express => {
     })
 
     app.use('/session', createSessionRouter(options));
+    app.use('/execute', createExecutorRouter(options));
     app.use('/db/contracts', createContractsRouter(options));
     app.use('/db/function_selectors', createFunctionSelectorsRouter(options));
     app.use('/db/user_function_selector_approvals', createUserFunctionSelectorApprovalsRouter(options));
