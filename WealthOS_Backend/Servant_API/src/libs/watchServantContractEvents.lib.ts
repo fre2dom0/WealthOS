@@ -1,12 +1,12 @@
 import '../configs/chain.config.js';
-import type { EventName, ApprovedEvent, RevokedEvent } from '../../types/blockchain.type.js';
+import type { EventName, ApprovedEvent, RevokedEvent } from '../../types/blockchain/blockchain.type.js';
 import { EVENT_TO_EVENT_TABLE, type EventData, type Tables } from '../../types/db/events.type.js';
 import { decodeEventLog, type Log } from 'viem';
 
 import { publicClient } from './blockchain.lib.js';
 
 import { API_CONFIG } from '../configs/api.config.js';
-import { ADDRESS_CONFIG } from '../configs/chain.config.js';
+import { CHAIN_CONFIG } from '../configs/chain.config.js';
 import servant_abi from '../configs/jsons/servant_artifact.json' with {type: 'json'};
 
 import { EVENT_QUERIES } from '../models/events.model.js';
@@ -75,7 +75,7 @@ export const processServantEvents = async (logs: Log<bigint, number, false, unde
 
 export const watchServantEvents = async () => {
     const unwatch = publicClient.watchEvent({
-        address: ADDRESS_CONFIG.servant_contract_address,
+        address: CHAIN_CONFIG.servant_contract_address,
         onLogs: async (logs) => {
             processServantEvents(logs);
         },
