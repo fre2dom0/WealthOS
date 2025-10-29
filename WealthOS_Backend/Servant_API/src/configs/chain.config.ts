@@ -1,12 +1,11 @@
-import type { BlockchainAddresses } from '../../types/module-wallets.config.type.js';
+import type { BlockchainConfig } from '../../types/module-wallets.config.type.js';
 
 import { requireEnv } from '../utils/requireEnv.util.js';
 import { validateWalletAddress } from '../utils/validators.util.js';
 import { devLog, infoLog } from '../utils/consoleLoggers.util.js';
 import { ApiError } from '../errors/ApiError.error.js';
 
-const MESSAGE = 'Invalid environment variable : ';
-
+const MESSAGE = 'Invalid environment variable : '
 /**
  * Reads .env.chain variables
  * @returns Read environment variables
@@ -42,27 +41,31 @@ const getEnvironmentVariables = () => {
         const owner_account_private_key = requireEnv('OWNER_ACCOUNT_PRIVATE_KEY');
         devLog(`\tOWNER_ACCOUNT_PRIVATE_KEY ${owner_account_private_key.substring(0, 2) + '*'.repeat(owner_account_private_key.length - 1)}`);
 
-        infoLog(`Blockchain configuration is ready.`, 'SUCCESS');
+        const node_key: string = requireEnv('NODE_KEY');
+        devLog(`\tNODE_KEY: ${node_key}`)
+        
+        infoLog(`Blockchain configuration is ready.`);
         return {
             servant_contract_address: servant_contract_address as `0x${string}`,
             servant_account_address: servant_account_address as `0x${string}`,
             servant_account_private_key: servant_account_private_key as `0x${string}`,
             owner_account_address: owner_account_address as `0x${string}`,
             owner_account_private_key: owner_account_private_key as `0x${string}`,
+            node_key
         }
     } catch (err: unknown) {
         ApiError.fatalError(err);
     }
 }
 
+const { servant_contract_address, servant_account_address, servant_account_private_key, owner_account_address, owner_account_private_key, node_key } = getEnvironmentVariables();
 
-const { servant_contract_address, servant_account_address, servant_account_private_key, owner_account_address, owner_account_private_key } = getEnvironmentVariables();
-
-export const ADDRESS_CONFIG: BlockchainAddresses = {
+export const CHAIN_CONFIG: BlockchainConfig = {
     servant_contract_address,
     servant_account_address,
     servant_account_private_key,
     owner_account_address,
-    owner_account_private_key
+    owner_account_private_key,
+    node_key
 }
 
