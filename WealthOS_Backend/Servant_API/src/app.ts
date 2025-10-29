@@ -11,7 +11,6 @@ import { createApp } from "./libs/createApp.lib.js";
 
 // TODO : 
 /**
- * Open database to the api and test it.
  * Make servant address to execute calls.
  */
 
