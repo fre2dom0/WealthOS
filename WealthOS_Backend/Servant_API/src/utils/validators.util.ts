@@ -6,14 +6,13 @@ import { ApiError } from "../errors/ApiError.error.js";
  */
 export const validateData = (data: object, throwError: boolean): string[] => {
     const missing: string[] = [];
-
     Object.entries(data).forEach(([key, value]) => {
-        if (value == null || value == undefined || value.trim() == '') {
+        if (value == null || value == undefined || (typeof value == 'string' && value.trim() == '')) {
             missing.push(key);
         }
         else if (Array.isArray(value)) {
             const hasEmptyString = value.some(item => {
-                return typeof item === 'string' && item.trim() === '';
+                return typeof item == 'string' && item.trim() === '';
             });
 
             if (hasEmptyString) {
