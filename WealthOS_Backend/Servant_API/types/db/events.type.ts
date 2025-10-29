@@ -1,4 +1,4 @@
-import type { EventName } from "../blockchain.type.js"
+import type { EventName } from "../blockchain/blockchain.type.js"
 
 export type Tables = 'approved' | 'revoked' | 'executed';
 

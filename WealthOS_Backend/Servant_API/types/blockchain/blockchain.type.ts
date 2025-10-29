@@ -23,3 +23,4 @@ export type EventArgsMap = {
     Revoked: RevokedEvent;
     Executed: ExecutedEvent;
 };
+
