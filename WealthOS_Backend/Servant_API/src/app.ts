@@ -11,7 +11,6 @@ import { createApp } from "./libs/createApp.lib.js";
 
 // TODO : 
 /**
- * Make servant address to execute calls.
  */
 
 // Start database
